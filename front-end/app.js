@@ -11,41 +11,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var iotf = require("ibmiotf");
 var app = express();
-var services = 
-{
-   "cloudantNoSQLDB": [
-      {
-         "name": "insuranceIOT-cloudantNoSQLDB",
-         "label": "cloudantNoSQLDB",
-         "plan": "Shared",
-         "credentials": {
-            "username": "3ddf789a-aa85-4a0a-a929-6d3a59ca4891-bluemix",
-            "password": "ece66132868f69ce50e24ce17185714a863b9a88fa645de9d02670ec5dc635b1",
-            "host": "3ddf789a-aa85-4a0a-a929-6d3a59ca4891-bluemix.cloudant.com",
-            "port": 443,
-            "url": "https://3ddf789a-aa85-4a0a-a929-6d3a59ca4891-bluemix:ece66132868f69ce50e24ce17185714a863b9a88fa645de9d02670ec5dc635b1@3ddf789a-aa85-4a0a-a929-6d3a59ca4891-bluemix.cloudant.com"
-         }
-      }
-   ],
-   "iotf-service": [
-      {
-         "name": "Internet of Things Foundation-9q",
-         "label": "iotf-service",
-         "plan": "iotf-service-free",
-         "credentials": {
-            "iotCredentialsIdentifier": "a2g6k39sl6r5",
-            "mqtt_host": "1s9v1t.messaging.internetofthings.ibmcloud.com",
-            "mqtt_u_port": 1883,
-            "mqtt_s_port": 8883,
-            "base_uri": "https://1s9v1t.internetofthings.ibmcloud.com:443/api/v0001",
-            "http_host": "1s9v1t.internetofthings.ibmcloud.com",
-            "org": "1s9v1t",
-            "apiKey": "a-1s9v1t-yo8qewypkl",
-            "apiToken": "oXxRcbjgx_f5Z1BXmj"
-         }
-      }
-   ]
-}
+var services = JSON.parse(process.env.VCAP_SERVICES); 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
