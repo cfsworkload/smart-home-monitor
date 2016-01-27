@@ -102,7 +102,7 @@ appClient.registerDevice(type, deviceId, authToken, deviceInfo, location, metada
 });
     
 var config = {
-    	"org" : "1s9v1t",
+    	"org" : services['iotf-service'][0]['credentials'].org,
     	"id" : "insurance-01",
     	"type" : "sensor",
     	"auth-method" : "token",
