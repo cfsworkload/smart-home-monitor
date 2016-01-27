@@ -164,7 +164,7 @@ deviceClient.on("connect", function () {
         console.log(message.toString())
         console.log('{ "d" : ' + message + ' }')
     	deviceClient.publish("status","json", '{ "d" : ' + message + '}');
-    	www.io.sockets.emit('update-msg', {message});
+    	www.io.sockets.emit('update-msg', { data: 'this is the data'});
 	});
 });
 
