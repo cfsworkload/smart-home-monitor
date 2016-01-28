@@ -38,7 +38,7 @@ app.use(function(req, res, next) {
 function hostnameFromReq(req) {
     if (req.headers.host === 'localhost:3000') {
         return String(req.protocol) + "://" + req.headers.host;
-		} else {
+	} else {
         return 'http://' + req.headers.host;
 	}
 }
@@ -66,24 +66,10 @@ app.use(function(err, req, res, next) {
 		error: {}
 	});
 });
-/*
-	var mqttLoop = require('mqtt');
-	var InfiniteLoop = require('infinite-loop');
-	var il = new InfiniteLoop;
-	var sleep = require('sleep');
-	function sendMessages(){
-	var mqttClient = mqttLoop.connect('mqtt://test.mosquitto.org');
-	mqttClient.on('connect', function () {
-	console.log('{ "temp" : ' + Math.floor(Math.random() * 300).toString() + ', "humidity" : ' + Math.floor(Math.random() * 300).toString() + ' }')
-	mqttClient.publish('wesley-test-999', '{ "temp" : ' + Math.floor(Math.random() * 300).toString() + ', "humidity" : ' + Math.floor(Math.random() * 300).toString() + ' }' );
-	});
-	sleep.sleep(5);
 
-	}
-
-	il.add(sendMessages, []);
-	il.run();
-*/
+res.header('Access-Control-Allow-Origin', 'http://localhost:8080/');
+res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 
 var appClientConfig = {
 	"org": services['iotf-service'][0]['credentials'].org,
