@@ -92,6 +92,6 @@ function onListening() {
 
 console.log("The value in host is = " + host );
 var io = require('socket.io')(server);
-io.set('origins', host);
+io.set('origins', 'http://insuranceiot-build-front-end.mybluemix.net' );
 
 module.exports.io = io;
