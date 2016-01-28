@@ -90,6 +90,6 @@ function onListening() {
 }
 
 var io = require('socket.io')(server);
-io.set('origins', 'http://localhost:3000');
+io.set('origins', server.address());
 
 module.exports.io = io;
