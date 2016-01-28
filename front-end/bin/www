@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 
+var host = (process.env.VCAP_APP_HOST || 'localhost:3000'); 
 var app = require('../app');
 var debug = require('debug')('insuranceIOT:server');
 var http = require('http')
@@ -90,6 +91,6 @@ function onListening() {
 }
 
 var io = require('socket.io')(server);
-io.set('origins', server.address());
+io.set('origins', host);
 
 module.exports.io = io;
