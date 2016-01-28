@@ -10,27 +10,9 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var iotf = require("ibmiotf");
 var app = express();
-var services =
-{
-	"iotf-service": [
-		{
-			"name": "insuranceIOT-build-iotf-service",
-			"label": "iotf-service",
-			"plan": "iotf-service-free",
-			"credentials": {
-				"iotCredentialsIdentifier": "a2g6k39sl6r5",
-				"mqtt_host": "yauue0.messaging.internetofthings.ibmcloud.com",
-				"mqtt_u_port": 1883,
-				"mqtt_s_port": 8883,
-				"base_uri": "https://yauue0.internetofthings.ibmcloud.com:443/api/v0001",
-				"http_host": "yauue0.internetofthings.ibmcloud.com",
-				"org": "yauue0",
-				"apiKey": "a-yauue0-85c0yrl4pt",
-				"apiToken": "t4Y?2KR1H&5EraaoTz"
-			}
-		}
-	]
-}
+
+var services = JSON.parse(process.env.VCAP_SERVICES);  
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -242,7 +224,6 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 		});
 
 		}, function onError (error) {
-		console.log("The value in org in before guts = " + services['iotf-service'][0]['credentials'].org)
 		console.log("Fail");
 		console.log(error);
 		var config = {
