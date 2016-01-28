@@ -90,6 +90,7 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
+console.log("The value in host is = " + host );
 var io = require('socket.io')(server);
 io.set('origins', host);
 
