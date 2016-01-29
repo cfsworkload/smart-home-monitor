@@ -5,13 +5,57 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var www = require('./bin/www');
-
+var mosca = require('mosca');
+var fs = require('fs');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var iotf = require("ibmiotf");
 var app = express();
 
 var services = JSON.parse(process.env.VCAP_SERVICES); 
+var port = (process.env.VCAP_APP_PORT || 3000);
+var host = (process.env.VCAP_APP_HOST || '0.0.0.0');
+
+var db;
+var cloudant;
+var dbCredentials = {
+	dbName : 'my_sample_db'
+};
+
+//setup cloudant db
+function initDBConnection() {
+	
+	if(process.env.VCAP_SERVICES) {
+		var vcapServices = JSON.parse(process.env.VCAP_SERVICES);
+		if(vcapServices.cloudantNoSQLDB) {
+			dbCredentials.host = vcapServices.cloudantNoSQLDB[0].credentials.host;
+			dbCredentials.port = vcapServices.cloudantNoSQLDB[0].credentials.port;
+			dbCredentials.user = vcapServices.cloudantNoSQLDB[0].credentials.username;
+			dbCredentials.password = vcapServices.cloudantNoSQLDB[0].credentials.password;
+			dbCredentials.url = vcapServices.cloudantNoSQLDB[0].credentials.url;
+		}
+		console.log('VCAP Services: '+JSON.stringify(process.env.VCAP_SERVICES));
+	}
+    else{
+            dbCredentials.host = "ffe37731-0505-4683-96a8-87d02a33e03e-bluemix.cloudant.com";
+			dbCredentials.port = 443;
+			dbCredentials.user = "ffe37731-0505-4683-96a8-87d02a33e03e-bluemix";
+			dbCredentials.password = "c7003d0b156d9c4ce856c4e6b4427f3b576c7ea6229235f0369ada1ed47b159c";
+			dbCredentials.url = "https://ffe37731-0505-4683-96a8-87d02a33e03e-bluemix:c7003d0b156d9c4ce856c4e6b4427f3b576c7ea6229235f0369ada1ed47b159c@ffe37731-0505-4683-96a8-87d02a33e03e-bluemix.cloudant.com";
+        
+    }
+
+	cloudant = require('cloudant')(dbCredentials.url);
+	
+	//check if DB exists if not create
+	cloudant.db.create(dbCredentials.dbName, function (err, res) {
+		if (err) { console.log('could not create db ', err); }
+    });
+	db = cloudant.use(dbCredentials.dbName);
+}
+
+initDBConnection();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -74,6 +118,32 @@ app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
         next();
 });
+
+
+
+var mqttServe = new mosca.Server({});
+
+mqttServe.on('clientConnected', function(client) {
+    console.log('client connected', client.id);
+});
+
+mqttServe.on('published', function(packet, client){
+
+	console.log('Message: ', packet.payload.toString("utf8"));
+	
+	fs.appendFile("../logs/mqtt.log", packet.topic + ": " + packet.payload.toString("utf8") + "\n", function(err) {
+	    if(err) {
+	        return console.log(err);
+	    }	
+	}); 
+	
+	db.insert({"Topic": packet.topic, "Message": packet.payload.toString("utf8")}, function(err, body) {
+ 		if (!err)
+    		console.log(body);
+		});
+
+});
+
 
 var appClientConfig = {
 	"org": services['iotf-service'][0]['credentials'].org,
