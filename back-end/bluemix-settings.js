@@ -51,7 +51,12 @@ var settings = module.exports = {
 
     functionGlobalContext: { },
 
-    storageModule: require("./couchstorage")
+    storageModule: require("./couchstorage"),
+    
+    httpNodeCors: {
+        origin: "*",
+        methods: "GET,PUT,POST,DELETE"
+    }
 }
 
 if (process.env.NODE_RED_USERNAME && process.env.NODE_RED_PASSWORD) {
@@ -89,8 +94,3 @@ if (!couchService) {
     throw new Error("No cloudant service found");
 }    
 settings.couchUrl = couchService.credentials.url;
-
-httpNodeCors: {
-   origin: "*",
-   methods: "GET,PUT,POST,DELETE"
-}
