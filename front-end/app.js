@@ -275,6 +275,6 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 	});
 });
 
-console.log(" The value in process.host is " + process.env.VCAP_APP_HOST); 
+console.log(" The value in process.host is " + process.env.HOSTNAME);
 
 module.exports = app;
