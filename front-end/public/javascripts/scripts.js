@@ -25,7 +25,7 @@ $(document).ready(function() {
 
       $('#policyid').html(data.PolicyID);
       
-      $('#analytics').html($.get('http://driot7.mybluemix.net/test?range=5'));
+      $('#analytics').html($.get('http://insuranceiot-build-back-end.mybluemix.net/MyServiceProviders2'));
     }
   });
 });
