@@ -5,21 +5,25 @@ $(document).ready(function() {
     //console.log(msg);
     var data = jQuery.parseJSON(msg.data);
     console.log(data);
-    $('.output').css('visibility', 'visible');
-    $('#temperature').html(data.temp + '\u2103');
-    $('#humidity').html(data.humidity + '%');
-    $('#deviceid').html(data.DeviceID);
+    
+    // make sure we have some datas
+    if(data.temp) {
+      $('.output').css('visibility', 'visible');
+      $('#temperature').html(data.temp + '\u2103');
+      $('#humidity').html(data.humidity + '%');
+      $('#deviceid').html(data.DeviceID);
 
-    var latitude = data.LocLat;
-    if(latitude < 0) latitude = (-1 * latitude) + '\u00B0S';
-    else latitude = latitude + '\u00B0N';
-    $('#loclat').html(latitude);
+      var latitude = data.LocLat;
+      if(latitude < 0) latitude = (-1 * latitude) + '\u00B0S';
+      else latitude = latitude + '\u00B0N';
+      $('#loclat').html(latitude);
 
-    var longitude = data.LocLong;
-    if(longitude < 0) longitude = (-1 * longitude) + '\u00B0W';
-    else longitude = longitude + '\u00B0E';
-    $('#loclong').html(longitude);
+      var longitude = data.LocLong;
+      if(longitude < 0) longitude = (-1 * longitude) + '\u00B0W';
+      else longitude = longitude + '\u00B0E';
+      $('#loclong').html(longitude);
 
-    $('#policyid').html(data.PolicyID);
+      $('#policyid').html(data.PolicyID);
+    }
   });
 });
