@@ -74,14 +74,6 @@ app.use(function(req, res, next) {
         next();
 });
 
-
-
-var mqttServe = new mosca.Server({});
-
-mqttServe.on('clientConnected', function(client) {
-    console.log('client connected', client.id);
-});
-
 var appClientConfig = {
 	"org": services['iotf-service'][0]['credentials'].org,
 	"id": services['iotf-service'][0]['credentials'].iotCredentialsIdentifier,
