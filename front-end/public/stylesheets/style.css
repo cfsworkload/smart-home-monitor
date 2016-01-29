@@ -290,3 +290,17 @@ img {
   font-size: 14px;
   color: #FFFFFF;
 }
+
+html, body, #map-canvas {
+  height: 80%;
+  width: 80%;
+  margin: 0px;
+  padding: 0px
+}
+
+#analytics {
+  font-size: 12px;
+  font-family: helvetica;
+  text-align: center;
+  margin-top: 100px;
+}

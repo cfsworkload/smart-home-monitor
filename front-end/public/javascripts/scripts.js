@@ -30,3 +30,71 @@ $(document).ready(function() {
     }
   });
 });
+
+var myLatlng = new google.maps.LatLng(37.349691000239545,-121.977338999795);
+var mapOptions = {
+  zoom: 10,
+  center: myLatlng
+};
+var map;
+
+var socketaddy = "ws://" + window.location.host + "/ServiceProviders";
+var message = "....";
+$(document).ready(function(){
+
+  $('#output').text = message;
+  sock = new WebSocket(socketaddy);
+  sock.onopen = function(){
+    console.log("Connected websocket");
+  };
+  sock.onerror = function(){ 
+    console.log("Websocket error"); 
+  };
+  sock.onclose = function () {};
+
+  sock.onmessage = function(evt){
+    console.log("Websocket message", evt); 
+    message = evt.data;
+    //$('#text').text(message)
+    //alert(message);
+    var jsonData = JSON.parse('{"IMBIOT":' + message + '}');
+    // Create table.
+    var table = document.createElement('table');
+    for (var i = 0; i < jsonData.IMBIOT.length; i++) {
+      var counter = jsonData.IMBIOT[i];
+      var provider = table.insertRow(i);
+      var provider_id = provider.insertCell(0);
+      provider_id.innerHTML = counter.PROVIDER_ID;
+
+      var provider_name = provider.insertCell(1);
+      provider_name.innerHTML = counter.PROVIDER_NAME;
+ 
+      var latitude = provider.insertCell(2);
+      latitude.innerHTML = counter.LATITUDE;
+
+      var longitude = provider.insertCell(3);
+      longitude.innerHTML = counter.LONGITUDE;
+
+      var div = document.getElementById('text');
+      div.innerHTML=table.innerHTML.replace('tbody','table').replace('tbody','table');
+
+      addMarker(counter.LATITUDE,counter.LONGITUDE);
+      document.getElementById('map-canvas').style.visibility='visible';
+      //console.log(counter.counter_name);
+      //alert(table.innerHTML);
+    }
+  };
+});
+
+function initialize() {
+  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+}
+
+function addMarker(latitude, longitude){
+  var marker = new google.maps.Marker({
+    position: new google.maps.LatLng(latitude, longitude),
+    map: map,
+    animation: google.maps.Animation.DROP,
+	title: 'Service Provider - ' 
+  });
+}
