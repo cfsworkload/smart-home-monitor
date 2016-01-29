@@ -24,6 +24,8 @@ $(document).ready(function() {
       $('#loclong').html(longitude);
 
       $('#policyid').html(data.PolicyID);
+      
+      $('#analytics').html($.get('http://driot7.mybluemix.net/test?range=5'));
     }
   });
 });
