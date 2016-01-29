@@ -193,7 +193,7 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 		mqttClient.on('connect', function () {
 			mqttClient.subscribe('wesley-test-999');
 		});
-		client.publish('presence', 'Hello mqtt');
+
 		mqttClient.on('message', function (topic, message) {
 			console.log("hey hey hey2")
 			console.log(message.toString())
@@ -207,6 +207,8 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 				www.io.sockets.emit('update-msg', { data: message.toString() });
 				deviceClient.disconnect();
 			});
+			console.log("trying to publish to localhost");
+			mqttClient.publish('wesley-test-999', '{ "d" : ' + message + '}');
 			deviceClient.on('disconnect', function(){
 				console.log('Disconnected from IoTF');
 			});
@@ -301,6 +303,8 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 				www.io.sockets.emit('update-msg', { data: message.toString() });
 				deviceClient.disconnect();
 			});
+			console.log("trying to publish to localhost");
+			mqttClient.publish('wesley-test-999', '{ "d" : ' + message + '}');
 			deviceClient.on('disconnect', function(){
 				console.log('Disconnected from IoTF');
 			});
@@ -340,6 +344,8 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 				www.io.sockets.emit('update-msg', { data: message.toString() });
 				deviceClient.disconnect();
 			});
+		    console.log("trying to publish to localhost");
+			mqttClient.publish('wesley-test-999', '{ "d" : ' + message + '}');
 			deviceClient.on('disconnect', function(){
 				console.log('Disconnected from IoTF');
 			});
