@@ -1,98 +1,111 @@
-[{
-	"id": "3e77d543.c1882a",
-	"type": "ibmiot in",
-	"authentication": "quickstart",
-	"apiKey": "",
-	"inputType": "evt",
-	"deviceId": "",
-	"applicationId": "",
-	"deviceType": "+",
-	"eventType": "+",
-	"commandType": "",
-	"format": "json",
-	"name": "IBM IoT App In",
-	"service": "quickstart",
-	"allDevices": false,
-	"allApplications": false,
-	"allDeviceTypes": true,
-	"allEvents": true,
-	"allCommands": false,
-	"allFormats": false,
-	"x": 251,
-	"y": 291,
-	"z": "d4428eef.2bbd7",
-	"wires": [["ae0082ac.51ff8",
-	"c0c482df.3f3b8"]]
-},{
-	"id": "ae0082ac.51ff8",
-	"type": "function",
-	"name": "temp",
-	"func": "return {payload:msg.payload.d.temp};",
-	"outputs": 1,
-	"valid": true,
-	"x": 424.5,
-	"y": 337,
-	"z": "d4428eef.2bbd7",
-	"wires": [["ff6ad0d9.00953"]]
-},{
-	"id": "ff6ad0d9.00953",
-	"type": "switch",
-	"name": "temp thresh",
-	"property": "payload",
-	"rules": [{
-		"t": "lte",
-		"v": 40,
-		"v2": null
-	},
-	{
-		"t": "gt",
-		"v": 40,
-		"v2": null
-	}],
-	"checkall": "true",
-	"outputs": 2,
-	"x": 590.5,
-	"y": 337,
-	"z": "d4428eef.2bbd7",
-	"wires": [["80621eff.7f9de"],
-	["8e1706a.f71e8f8"]]
-},{
-	"id": "5dad02b7.a252fc",
-	"type": "debug",
-	"name": "cpu status",
-	"active": true,
-	"complete": "false",
-	"x": 901.5,
-	"y": 334,
-	"z": "d4428eef.2bbd7",
-	"wires": []
-},{
-	"id": "c0c482df.3f3b8",
-	"type": "debug",
-	"name": "device data",
-	"active": true,
-	"console": "false",
-	"complete": "true",
-	"x": 441.5,
-	"y": 247,
-	"z": "d4428eef.2bbd7",
-	"wires": []
-},{
-	"id": "80621eff.7f9de",
-	"type": "template",
-	"name": "safe",
-	"template": "Temperature ({{payload}}) within safe limits",
-	"x": 754.5,
-	"y": 288,
-	"z": "d4428eef.2bbd7",
-	"wires": [["5dad02b7.a252fc"]]
-},{
-	"id": "8e1706a.f71e8f8",
-	"type": "template",
-	"name": "danger",
-	"template": "Temperature ({{payload}}) critical",
-	"x": 753.5,
-	"y": 382,
-	"z": "d4428eef.2bbd7",
-	"wires": [["5dad02b7.a252fc"]]
-}]
+[
+  {
+    "id":"a04b2ea6.5fb4d",
+    "type":"http in",
+    "z":"8bba6ec0.74459",
+    "name":"HTTPGetRequest",
+    "url":"/test",
+    "method":"get",
+    "swaggerDoc":"",
+    "x":100,
+    "y":360,
+    "wires":[
+      [
+        "5ea07d7f.a15f84",
+        "bc65bbd8.439a48"
+      ]
+    ]
+  },
+  {
+    "id":"cd98e892.326718",
+    "type":"template",
+    "z":"8bba6ec0.74459",
+    "name":"HTTPPresentResponse",
+    "field":"payload",
+    "fieldType":"msg",
+    "format":"handlebars",
+    "template":"<html>\n  <head>\n    <meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\">\n    <meta charset=\"utf-8\">\n    <title>Recommended Service Providers</title>\n    <style>\n      html, body, #map-canvas {\n        height: 80%;\n        width:80%;\n        margin: 0px;\n        padding: 0px\n      }\n    </style>\n    <script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp\"></script>\n    <script>\n\t\tfunction initialize() {\n\t\t  var myLatlng = new google.maps.LatLng(37.349691000239545,-121.977338999795);\n\t\t  var mapOptions = {\n\t\t    zoom: 10,\n\t\t    center: myLatlng\n\t\t  };\n\t\t  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);\n            var table = document.getElementById('tblServiceProviders');\n            for (var r = 1, n = table.rows.length; r < n; r++) {\n                var lat_values=table.rows[r].cells[table.rows[r].cells.length-1].innerHTML;\n                var long_values=table.rows[r].cells[table.rows[r].cells.length-2].innerHTML;\n                var marker = new google.maps.Marker({\n    \t\t\t    position: new google.maps.LatLng(long_values,lat_values),\n    \t\t\t    map: map,\n    \t\t\t    animation: google.maps.Animation.DROP,\n    \t\t\t    title: 'Service Provider'\n    \t\t\t  });\n                //alert('Latitude=' + lat_values + ', Longitude=' + long_values);\n            }\n\n\t\t}\n\n\t\tgoogle.maps.event.addDomListener(window, 'load', initialize);\n\n    </script>\n  </head>\n  <body>\n\n                <table border='1' id='tblServiceProviders' name='tblServiceProviders'>\n                    <thead><tr><th>ID</th><th>Name</th><th>Distance</th><th>Latitude</th><th>Longitude</th></tr></thead>\n                {{#payload}}\n                  <tr><td>{{PROVIDER_ID}}</td><td>{{PROVIDER_NAME}}</td><td><b>{{DISTANCE}}</b></td><td>{{LATITUDE}}</td><td>{{LONGITUDE}}</td></tr>\n                {{/payload}}\n                </table> \n                <div id=\"map-canvas\"></div>\n  </body>\n</html>\n",
+    "x":730,
+    "y":360,
+    "wires":[
+      [
+        "1938de1e.e6c722"
+      ]
+    ]
+  },
+  {
+    "id":"1938de1e.e6c722",
+    "type":"http response",
+    "z":"8bba6ec0.74459",
+    "name":"HTTPResponse",
+    "x":960,
+    "y":260,
+    "wires":[
+
+    ]
+  },
+  {
+    "id":"5ea07d7f.a15f84",
+    "type":"dashDB in",
+    "z":"8bba6ec0.74459",
+    "service":"dashDB-px",
+    "query":"select *,db2gse.st_distance(db2gse.st_point(37.395664, -121.982145,1005), provider_location,'MILE') as distance, db2gse.st_x(provider_location) as latitude,db2gse.st_y(provider_location) as longitude  from service_providers where db2gse.st_distance(db2gse.st_point(37.395664, -121.982145,1005), provider_location,'MILE')<?;",
+    "params":"msg.req.query.range",
+    "name":"queryServiceProviders",
+    "x":420,
+    "y":260,
+    "wires":[
+      [
+        "cd98e892.326718",
+        "c6ca81db.39358"
+      ]
+    ]
+  },
+  {
+    "id":"c6ca81db.39358",
+    "type":"debug",
+    "z":"8bba6ec0.74459",
+    "name":"",
+    "active":false,
+    "console":"false",
+    "complete":"payload",
+    "x":700,
+    "y":160,
+    "wires":[
+
+    ]
+  },
+  {
+    "id":"e3d5db65.1c2a28",
+    "type":"inject",
+    "z":"8bba6ec0.74459",
+    "name":"",
+    "topic":"",
+    "payload":"",
+    "payloadType":"date",
+    "repeat":"",
+    "crontab":"",
+    "once":false,
+    "x":120,
+    "y":180,
+    "wires":[
+      [
+        "5ea07d7f.a15f84"
+      ]
+    ]
+  },
+  {
+    "id":"bc65bbd8.439a48",
+    "type":"debug",
+    "z":"8bba6ec0.74459",
+    "name":"",
+    "active":true,
+    "console":"false",
+    "complete":"false",
+    "x":400,
+    "y":400,
+    "wires":[
+
+    ]
+  }
+]
