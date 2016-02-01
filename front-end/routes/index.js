@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
   var mqtt = require('mqtt');
   var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
   mqttClient.on('connect', function () {
-  mqttClient.publish('wesley-test-999', '{ "temp" : 25, "humidity" : 77, "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }');
+  mqttClient.publish('wesley-test-999', '{ "temp" : 25, "humidity" : 77, "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }', function () { console.log("We returned from callback"); });
   });
 
 
