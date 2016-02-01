@@ -120,7 +120,7 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 		mqttClient.on('connect', function () {
-			mqttClient.subscribe('wesley-test-999');
+			mqttClient.subscribe(process.env.HOSTNAME);
 		});
 
 		mqttClient.on('message', function (topic, message) {
@@ -164,7 +164,7 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 		mqttClient.on('connect', function () {
-			mqttClient.subscribe('wesley-test-999');
+			mqttClient.subscribe(process.env.HOSTNAME);
 		});
 		mqttClient.on('message', function (topic, message) {
 			console.log("hey hey hey2")
@@ -213,7 +213,7 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 		mqttClient.on('connect', function () {
-			mqttClient.subscribe('wesley-test-999');
+			mqttClient.subscribe(process.env.HOSTNAME);
 		});
 		mqttClient.on('message', function (topic, message) {
 			console.log("hey hey hey2")
@@ -252,7 +252,7 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 		mqttClient.on('connect', function () {
-			mqttClient.subscribe('wesley-test-999');
+			mqttClient.subscribe(process.env.HOSTNAME);
 		});
 		mqttClient.on('message', function (topic, message) {
 			console.log("hey hey hey2")
@@ -283,7 +283,7 @@ setInterval(function() {
         var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 		  mqttClient.on('connect', function () {
-	      mqttClient.publish('wesley-test-999', '{ "temp" : ' + randomNumber1 + ', "humidity" : ' + randomNumber2 + ', "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }');
+	      mqttClient.publish(process.env.HOSTNAME, '{ "temp" : ' + randomNumber1 + ', "humidity" : ' + randomNumber2 + ', "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }');
 		});
 
 }, 5000) 
@@ -294,7 +294,7 @@ setInterval(function() {
          var mqtt = require('mqtt');
 		 var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 		  mqttClient.on('connect', function () {
-	      mqttClient.publish('wesley-test-999', '{ "temp" : ' + randomNumber1 + ', "humidity" : ' + randomNumber2 + ', "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }');
+	      mqttClient.publish(process.env.HOSTNAME, '{ "temp" : ' + randomNumber1 + ', "humidity" : ' + randomNumber2 + ', "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }');
 		});       
 }, 30000) 
 
