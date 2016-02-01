@@ -24,9 +24,10 @@ $(document).ready(function() {
       $('#loclong').html(longitude);
 
       $('#policyid').html(data.PolicyID);
-      var retData = $.get('http://insuranceiot-build-back-end.mybluemix.net/MyServiceProviders2');
+
+      /*var retData = $.get('http://insuranceiot-build-back-end.mybluemix.net/MyServiceProviders2');
       console.log(retData);
-      $('#analytics').innerHTML = retData;
+      $('#analytics').innerHTML = retData;*/
     }
   });
 });
