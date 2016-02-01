@@ -2,14 +2,19 @@ $(document).ready(function() {
   window.location.origin = window.location.origin || (window.location.protocol + '//' + window.location.hostname + ':' + window.location.port);
   var socket = io.connect(window.location.origin);
   socket.on('update-msg', function (msg) {
-    //console.log(msg);
     var data = jQuery.parseJSON(msg.data);
     console.log(data);
     
     // make sure we have some data
     if(data.temp) {
-      $('#temperature').html(data.temp + '\u2103');
-      $('#humidity').html(data.humidity + '%');
+      var tempStr = data.temp + '\u2103';
+      if(data.temp > 90) tempStr += ' Alert! High temperature!';
+      $('#temperature').html(tempStr);
+      
+      var humidityStr = data.humidity + '%';
+      if(data.humidity > 90) humidityStr += ' Alert! High humidity!';
+      $('#humidity').html(humidityStr);
+      
       $('#deviceid').html(data.DeviceID);
 
       var latitude = data.LocLat;
@@ -23,10 +28,6 @@ $(document).ready(function() {
       $('#loclong').html(longitude);
 
       $('#policyid').html(data.PolicyID);
-
-      /*var retData = $.get('http://insuranceiot-build-back-end.mybluemix.net/MyServiceProviders2');
-      console.log(retData);
-      $('#analytics').innerHTML = retData;*/
     }
   });
 });
@@ -55,8 +56,6 @@ $(document).ready(function(){
   sock.onmessage = function(evt){
     console.log("Websocket message", evt); 
     message = evt.data;
-    //$('#text').text(message)
-    //alert(message);
     var jsonData = JSON.parse('{"IMBIOT":' + message + '}');
     // Create table.
     var table = document.createElement('table');
@@ -80,14 +79,11 @@ $(document).ready(function(){
 
       addMarker(counter.LATITUDE,counter.LONGITUDE);
       document.getElementById('map-canvas').style.visibility='visible';
-      //console.log(counter.counter_name);
-      //alert(table.innerHTML);
     }
   };
 });
 
-function initialize() {
-  console.log("finding a map!");
+function initializeMap() {
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 }
 
