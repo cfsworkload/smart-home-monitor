@@ -277,4 +277,26 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 
 console.log(" The value in process.host is " + process.env.HOSTNAME);
 
+setInterval(function() {  
+        var randomNumber1 = Math.floor(Math.random() * 6) + 85;
+        var randomNumber2 = Math.floor(Math.random() * 6) + 85;
+        var mqtt = require('mqtt');
+		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
+		  mqttClient.on('connect', function () {
+	      mqttClient.publish('wesley-test-999', '{ "temp" : ' + randomNumber1 + ', "humidity" : ' + randomNumber2 + ', "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }');
+		});
+
+}, 5000) 
+
+setInterval(function() {  
+         var randomNumber1 = Math.floor(Math.random() * 3) + 91;
+         var randomNumber2 = Math.floor(Math.random() * 3) + 91;
+         var mqtt = require('mqtt');
+		 var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
+		  mqttClient.on('connect', function () {
+	      mqttClient.publish('wesley-test-999', '{ "temp" : ' + randomNumber1 + ', "humidity" : ' + randomNumber2 + ', "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }');
+		});       
+}, 30000) 
+
+
 module.exports = app;
