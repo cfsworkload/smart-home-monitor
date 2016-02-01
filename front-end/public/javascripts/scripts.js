@@ -6,9 +6,8 @@ $(document).ready(function() {
     var data = jQuery.parseJSON(msg.data);
     console.log(data);
     
-    // make sure we have some datas
+    // make sure we have some data
     if(data.temp) {
-      $('.output').css('visibility', 'visible');
       $('#temperature').html(data.temp + '\u2103');
       $('#humidity').html(data.humidity + '%');
       $('#deviceid').html(data.DeviceID);
