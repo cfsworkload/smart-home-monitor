@@ -88,6 +88,7 @@ $(document).ready(function(){
 });
 
 function initialize() {
+  console.log("finding a map!");
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 }
 
