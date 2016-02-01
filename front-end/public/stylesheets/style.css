@@ -291,11 +291,11 @@ img {
   color: #FFFFFF;
 }
 
-html, body, #map-canvas {
+#map-canvas {
   height: 80%;
   width: 80%;
-  margin: 0px;
-  padding: 0px
+  margin: 0;
+  padding: 0;
 }
 
 #analytics {
