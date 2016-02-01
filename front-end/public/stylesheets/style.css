@@ -302,5 +302,9 @@ img {
   font-size: 12px;
   font-family: helvetica;
   text-align: center;
-  margin-top: 100px;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  
 }
