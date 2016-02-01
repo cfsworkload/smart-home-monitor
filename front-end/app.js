@@ -280,7 +280,7 @@ console.log(" The value in process.host is " + process.env.HOSTNAME);
 var intervalCounter = 0;
 setInterval(function() {
 	var randomNumber1, randomNumber2;
-	if(intervalCounter < 5)
+	if(intervalCounter < 5) {
 		randomNumber1 = Math.floor(Math.random() * 6) + 85;
 		randomNumber2 = Math.floor(Math.random() * 6) + 85;
 	} else {
