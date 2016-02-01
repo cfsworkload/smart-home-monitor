@@ -39,7 +39,7 @@ var mapOptions = {
 };
 var map;
 
-var socketaddy = "ws://http://insuranceiot-build-back-end.mybluemix.net//ServiceProviders";
+var socketaddy = "ws://insuranceiot-build-back-end.mybluemix.net/ServiceProviders";
 var message = "....";
 $(document).ready(function(){
 
