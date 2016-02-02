@@ -2,7 +2,7 @@ extends layout
 
 block content
   h1 Insurance IOT
-  p.output Current data being passed through
+  p.output Current data from IOT Device
   .output
     h2 Temperature
     p#temperature Waiting for data...
@@ -20,5 +20,6 @@ block content
     h2 PolicyID
     p#policyid Waiting for data...
   .output#analytics
+    h2 Current providers in the device's area approved by the insurance company 
     #text
     #map-canvas(name="map-canvas")
