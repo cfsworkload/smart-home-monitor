@@ -91,6 +91,7 @@ var desc = "house humidty sensor"
 var metadata = {"customField1": "customValue3", "customField2": "customValue4"}
 var deviceInfo = {"serialNumber": "001", "manufacturer": "Blueberry", "model": "e2", "deviceClass": "A", "descriptiveLocation" : "Bangalore", "fwVersion" : "1.0.1", "hwVersion" : "12.01"}
 
+// register IOT device type
 appClient.
 registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argument) {
     console.log("Success");
@@ -102,7 +103,7 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 	var metadata = {"DeviceID": "insurance-01", "PolicyID": "6134141"}
 	var deviceInfo = {"serialNumber": "001", "manufacturer": "Blueberry", "model": "e2", "deviceClass": "A", "fwVersion" : "1.0.1", "hwVersion" : "12.01"}
 	var location = {"longitude" : "-121.8863", "latitude" : "37.3382", "elevation" : "49", "accuracy" : "0", "measuredDateTime" : "2015-10-28T08:45:11.662Z"}
-
+    //register device
 	appClient.registerDevice(type, deviceId, authToken, deviceInfo, location, metadata).then (function onSuccess (response) {
 		console.log("Success");
 		console.log(response);
@@ -116,23 +117,19 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 
 		var Client = require("ibmiotf");
 		var io = require('socket.io')
-		console.log("hey hey hey")
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 		mqttClient.on('connect', function () {
 			mqttClient.subscribe(process.env.HOSTNAME);
 		});
-
+        // on MQTT message
 		mqttClient.on('message', function (topic, message) {
-			console.log("hey hey hey2")
-			console.log(message.toString())
-			console.log('{ "d" : ' + message + ' }')
 			var deviceClient = new Client.IotfDevice(config);
 			deviceClient.connect();
 			deviceClient.on("connect", function () {
 				console.log('publishing...');
+				// write MQTT message to IOT foundation services
 				deviceClient.publish("status","json", '{ "d" : ' + message + '}');
-				//www.io.sockets.emit('update-msg', { data: 'this is the data' + message.toString()});
 				www.io.sockets.emit('update-msg', { data: message.toString() });
 				deviceClient.disconnect();
 			});
@@ -147,7 +144,6 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 
 		console.log("Fail");
 		console.log(error);
-		console.log("The value in org in before guts = " + services['iotf-service'][0]['credentials'].org)
 		var config = {
 			"org" : services['iotf-service'][0]['credentials'].org.toString(),
 			"id" : "insurance-01",
@@ -157,25 +153,18 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 		};
 
 		var Client = require("ibmiotf");
-		var io = require('socket.io')
-
-
-	    console.log("hey hey hey")
+		var io = require('socket.io');
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 		mqttClient.on('connect', function () {
 			mqttClient.subscribe(process.env.HOSTNAME);
 		});
 		mqttClient.on('message', function (topic, message) {
-			console.log("hey hey hey2")
-			console.log(message.toString())
-			console.log('{ "d" : ' + message + ' }')
 			var deviceClient = new Client.IotfDevice(config);
 			deviceClient.connect();
 			deviceClient.on("connect", function () {
 				console.log('publishing...');
       			deviceClient.publish("status","json", '{ "d" : ' + message + '}');
-				//www.io.sockets.emit('update-msg', { data: 'this is the data' + message.toString()});
 				www.io.sockets.emit('update-msg', { data: message.toString() });
 				deviceClient.disconnect();
 			});
@@ -205,26 +194,19 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 			"auth-method" : "token",
 			"auth-token" : "password"
 		};
-		console.log("The value in org in before guts = " + services['iotf-service'][0]['credentials'].org)
 		var Client = require("ibmiotf");
 		var io = require('socket.io')
-
-	    console.log("hey hey hey")
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 		mqttClient.on('connect', function () {
 			mqttClient.subscribe(process.env.HOSTNAME);
 		});
 		mqttClient.on('message', function (topic, message) {
-			console.log("hey hey hey2")
-			console.log(message.toString())
-			console.log('{ "d" : ' + message + ' }')
 			var deviceClient = new Client.IotfDevice(config);
 			deviceClient.connect();
 			deviceClient.on("connect", function () {
 				console.log('publishing...');
 				deviceClient.publish("status","json", '{ "d" : ' + message + '}');
-				//www.io.sockets.emit('update-msg', { data: 'this is the data' + message.toString()});
 				www.io.sockets.emit('update-msg', { data: message.toString() });
 				deviceClient.disconnect();
 			});
@@ -234,7 +216,6 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 		});
 
 		}, function onError (error) {
-		console.log("The value in org in before guts = " + services['iotf-service'][0]['credentials'].org)
 		console.log("Fail");
 		console.log(error);
 		var config = {
@@ -247,23 +228,17 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 
 		var Client = require("ibmiotf");
 		var io = require('socket.io')
-
-	    console.log("hey hey hey")
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 		mqttClient.on('connect', function () {
 			mqttClient.subscribe(process.env.HOSTNAME);
 		});
 		mqttClient.on('message', function (topic, message) {
-			console.log("hey hey hey2")
-			console.log(message.toString())
-			console.log('{ "d" : ' + message + ' }')
 			var deviceClient = new Client.IotfDevice(config);
 			deviceClient.connect();
 			deviceClient.on("connect", function () {
 				console.log('publishing...');
 				deviceClient.publish("status","json", '{ "d" : ' + message + '}');
-				//www.io.sockets.emit('update-msg', { data: 'this is the data' + message.toString()});
 				www.io.sockets.emit('update-msg', { data: message.toString() });
 				deviceClient.disconnect();
 			});
@@ -275,26 +250,26 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 	});
 });
 
-console.log(" The value in process.host is " + process.env.HOSTNAME);
+setInterval(function() {  
+        var randomNumber1 = Math.floor(Math.random() * 6) + 85;
+        var randomNumber2 = Math.floor(Math.random() * 6) + 85;
+        var mqtt = require('mqtt');
+		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
+		  mqttClient.on('connect', function () {
+	      mqttClient.publish(process.env.HOSTNAME, '{ "temp" : ' + randomNumber1 + ', "humidity" : ' + randomNumber2 + ', "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }');
+		});
 
-var intervalCounter = 0;
-setInterval(function() {
-	var randomNumber1, randomNumber2;
-	if(intervalCounter < 5) {
-		randomNumber1 = Math.floor(Math.random() * 6) + 85;
-		randomNumber2 = Math.floor(Math.random() * 6) + 85;
-	} else {
-		randomNumber1 = Math.floor(Math.random() * 3) + 91;
-		randomNumber2 = Math.floor(Math.random() * 3) + 91;
-	}
+}, 5000) 
 
-	intervalCounter = (intervalCounter + 1) % 6;
+setInterval(function() {  
+         var randomNumber1 = Math.floor(Math.random() * 3) + 91;
+         var randomNumber2 = Math.floor(Math.random() * 3) + 91;
+         var mqtt = require('mqtt');
+		 var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
+		  mqttClient.on('connect', function () {
+	      mqttClient.publish(process.env.HOSTNAME, '{ "temp" : ' + randomNumber1 + ', "humidity" : ' + randomNumber2 + ', "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }');
+		});       
+}, 30000) 
 
-	var mqtt = require('mqtt');
-	var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
-	mqttClient.on('connect', function () {
-		mqttClient.publish(process.env.HOSTNAME, '{ "temp" : ' + randomNumber1 + ', "humidity" : ' + randomNumber2 + ', "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }');
-	});
-}, 5000)
 
 module.exports = app;
