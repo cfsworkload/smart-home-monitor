@@ -1,24 +1,30 @@
 extends layout
 
 block content
-  h1 Insurance IOT
-  p.output Current data from IOT Device
-  .output
-    h2 Temperature
-    p#temperature Waiting for data...
-  .output
-    h2 Humidity
-    p#humidity Waiting for data...
-  .output
-    h2 DeviceID
-    p#deviceid Waiting for data...
-  .output
-    h2 Location
-    p#loclat Waiting for data...
-    p#loclong
-  .output
-    h2 PolicyID
-    p#policyid Waiting for data...
+  div
+    .col-md-6
+      h1 Insurance IOT
+      p.output Current data from IOT Device
+      .output
+        h2 Temperature
+        p#temperature Waiting for data...
+      .output
+        h2 Humidity
+        p#humidity Waiting for data...
+      .output
+        h2 DeviceID
+        p#deviceid Waiting for data...
+      .output
+        h2 Location
+        p#loclat Waiting for data...
+        p#loclong
+      .output
+        h2 PolicyID
+        p#policyid Waiting for data...
+    .col-md-6
+      img(src="images/power_decision_tree.jpg")
+      p Current probability that client will churn:
+      p TRUE
   .output#analytics
     h2 Current providers in the device's area approved by the insurance company 
     #text
