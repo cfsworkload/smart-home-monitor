@@ -296,8 +296,8 @@ img {
 
 #analytics {
   font-size: 12px;
-  font-family: helvetica;
-  text-align: center;
+  /*font-family: helvetica;
+  text-align: center;*/
   margin: 0;
   padding: 0;
   height: 100%;
@@ -308,4 +308,9 @@ img {
 html, body {
 	height: 100%;
 	width: 100%;
+}
+
+img {
+	height: 543px;
+	width: 673px;
 }
