@@ -310,7 +310,11 @@ html, body {
 	width: 100%;
 }
 
-img {
-	height: 543px;
-	width: 673px;
+#decision-tree {
+	height: auto;
+	width: 680%;
+}
+
+.boolean {
+	font-size: 14px;
 }
