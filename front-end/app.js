@@ -252,7 +252,7 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 
 var intervalCounter = 0;
 setInterval(function() {
-	var randomNumber = Math.floor(Math.random * 1000) + (1000 * intervalCounter);
+	var randomNumber = Math.floor(Math.random() * 1000) + (1000 * intervalCounter);
 
 	intervalCounter = (intervalCounter + 1) % 6;
 
