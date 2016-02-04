@@ -261,7 +261,7 @@ setInterval(function() {
 	mqttClient.on('connect', function () {
 		mqttClient.publish(process.env.HOSTNAME, '{ "power" : ' + randomNumber + ', "maxPower" : 5000, "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }');
 	});
-}, 5000)
+}, 30000)
 
 
 
