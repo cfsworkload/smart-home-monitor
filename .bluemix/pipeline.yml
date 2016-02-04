@@ -1,0 +1,75 @@
+---
+stages:
+- name: build
+  inputs:
+  - type: git
+    branch: master
+  triggers:
+  - type: commit
+  jobs:
+  - name: Build
+    type: builder
+    artifact_dir: ''
+- name: deploy front-end
+  inputs:
+  - type: job
+    stage: build
+    job: Build
+  triggers:
+  - type: stage
+  jobs:
+  - name: Deploy
+    type: deployer
+    target:
+      region_id: ibm:yp:us-south
+      organization: cfsworkload
+      space: dev
+      application: insuranceIOT-build
+    script: "#!/bin/bash\n\ncd front-end\nhostname=\"${CF_APP}.mybluemix.net\"\ncf\
+      \ create-service cloudantNoSQLDB Shared \"${CF_APP}-cloudant\"\ncf create-service\
+      \ iotf-service iotf-service-free \"${CF_APP}-iotf-service\"\ncf push \"${CF_APP}-front-end\"\
+      \ -n \"${CF_APP}-front-end\" --no-start\ncf set-env \"${CF_APP}-front-end\"\
+      \ HOSTNAME $hostname\ncf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-cloudant\"\
+      \ \ncf bind-service \"${CF_APP}-front-end\" \"${CF_APP}-iotf-service\"\ncf start\
+      \ \"${CF_APP}-front-end\""
+- name: deploy back-end
+  inputs:
+  - type: job
+    stage: build
+    job: Build
+  jobs:
+  - name: deploy node-red
+    type: deployer
+    target:
+      region_id: ibm:yp:us-south
+      organization: cfsworkload
+      space: dev
+      application: insuranceIOT-build
+    script: "#!/bin/bash   \n      insightApikey=`cf env \"${CF_APP}-back-end\" |\
+      \ grep apiKey -m 1 | awk '{print $2}'`\n      insightApikey=${insightApikey:1:${#insightApikey}-3}\n\
+      \      insightApitoken=`cf env \"${CF_APP}-back-end\" | grep authToken | awk\
+      \ '{print $2}'`\n      insightApitoken=${insightApitoken:1:${#insightApitoken}-3}\n\
+      \      foundationOrg=`cf env \"${CF_APP}-back-end\" | grep org | tail -n 1 |\
+      \ awk '{print $2}'`\n      foundationOrg=${foundationOrg:1:${#foundationOrg}-2}\n\
+      \      echo \"The value in foundationOrg is ${foundationOrg}\"\n      foundationKey=`cf\
+      \ env \"${CF_APP}-back-end\" | grep apiKey | tail -n 1 | awk '{print $2}'`\n\
+      \      foundationKey=${foundationKey:1:${#foundationKey}-3}\n      echo \"The\
+      \ value in foundationKey is ${foundationKey}\"\n      foundationToken=`cf env\
+      \ \"${CF_APP}-back-end\" | grep apiToken | tail -n 1 | awk '{print $2}'`\n \
+      \     foundationToken=${foundationToken:1:${#foundationToken}-3}\n      echo\
+      \ \"The value in foundation token = ${foundationToken}\"\n      cd back-end\n\
+      \      cf create-service cloudantNoSQLDB Shared \"${CF_APP}-cloudant\"\n   \
+      \   cf create-service dashDB Entry \"${CF_APP}-dashDB\"\n      cf create-service\
+      \ erservice free \"${CF_APP}-erservice\"\n      cf create-service \"IoT Real-Time\
+      \ Insight\" Lite \"${CF_APP}-insights\"\n      # create message source in insight\
+      \ service \n      echo \"Sending rest request\"\n      #curl -X POST -H 'Content-Type:\
+      \ application/json' -u ${insightApikey}:${insightApitoken} -d '{ \"name\": \"\
+      insuranceIOT\", \"orgId\": \"'\"${foundationOrg}\"'\", \"apiKey\": \"'\"${foundationKey}\"\
+      '\", \"authToken\": \"'\"${foundationToken}\"'\", \"disabled\": \"false\" }'\
+      \ https://iotrti-prod.mam.ibmserviceengage.com/api/v2/message/source\n\n\n \
+      \     cf push \"${CF_APP}-back-end\" -n \"${CF_APP}-back-end\" --no-start\n\
+      \      cf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-cloudant\"\n     \
+      \ cf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-dashDB\"\n      cf bind-service\
+      \ \"${CF_APP}-back-end\" \"${CF_APP}-erservice\"\n      cf bind-service \"${CF_APP}-back-end\"\
+      \ \"${CF_APP}-iotf-service\"\n      cf bind-service \"${CF_APP}-back-end\" \"\
+      ${CF_APP}-insights\"\n      cf start \"${CF_APP}-back-end\""
