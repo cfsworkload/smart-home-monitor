@@ -2,6 +2,7 @@ $(document).ready(function() {
   window.location.origin = window.location.origin || (window.location.protocol + '//' + window.location.hostname + ':' + window.location.port);
   var socket = io.connect(window.location.origin);
   socket.on('update-msg', function (msg) {
+  	console.log(msg);
     var data = jQuery.parseJSON(msg.data);
     console.log(data);
     
