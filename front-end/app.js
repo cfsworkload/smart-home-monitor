@@ -252,21 +252,14 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 
 var intervalCounter = 0;
 setInterval(function() {
-	var randomNumber1, randomNumber2;
-	if(intervalCounter < 5) {
-		randomNumber1 = Math.floor(Math.random() * 6) + 85;
-		randomNumber2 = Math.floor(Math.random() * 6) + 85;
-	} else {
-		randomNumber1 = Math.floor(Math.random() * 3) + 91;
-		randomNumber2 = Math.floor(Math.random() * 3) + 91;
-	}
+	var randomNumber = Math.floor(Math.random * 1000) + (1000 * intervalCounter);
 
 	intervalCounter = (intervalCounter + 1) % 6;
 
 	var mqtt = require('mqtt');
 	var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 	mqttClient.on('connect', function () {
-		mqttClient.publish(process.env.HOSTNAME, '{ "temp" : ' + randomNumber1 + ', "humidity" : ' + randomNumber2 + ', "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }');
+		mqttClient.publish(process.env.HOSTNAME, '{ "power" : ' + randomNumber + ', "maxPower" : 5000, "DeviceID" : "insurance-01", "LocLat" : 37.3382, "LocLong" : -121.8863, "PolicyID" : 6134141 }');
 	});
 }, 5000)
 

@@ -6,14 +6,20 @@ $(document).ready(function() {
     console.log(data);
     
     // make sure we have some data
-    if(data.temp) {
-      var tempStr = data.temp + '\u2103';
+    if(data.power) {
+      /*var tempStr = data.temp + '\u2103';
       if(data.temp > 90) tempStr += ' Alert! High temperature!';
       $('#temperature').html(tempStr);
-      
+
       var humidityStr = data.humidity + '%';
       if(data.humidity > 90) humidityStr += ' Alert! High humidity!';
-      $('#humidity').html(humidityStr);
+      $('#humidity').html(humidityStr);*/
+
+      var powerStr = data.power + 'W';
+      if(data.power >= 5000) powerStr += ' Alert! High power!';
+      $('#power').html(powerStr);
+
+      $('#maxpower').html(data.maxPower + 'W');
       
       $('#deviceid').html(data.DeviceID);
 
