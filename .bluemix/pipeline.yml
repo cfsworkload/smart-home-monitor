@@ -21,10 +21,10 @@ stages:
   - name: Deploy
     type: deployer
     target:
-      region_id: ibm:yp:us-south
-      organization: cfsworkload
-      space: dev
-      application: insuranceIOT-build
+      url: ${CF_TARGET_URL}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
+      application: ${CF_APP}
     script: "#!/bin/bash\n\ncd front-end\nhostname=\"${CF_APP}.mybluemix.net\"\ncf\
       \ create-service cloudantNoSQLDB Shared \"${CF_APP}-cloudant\"\ncf create-service\
       \ iotf-service iotf-service-free \"${CF_APP}-iotf-service\"\ncf push \"${CF_APP}-front-end\"\
@@ -41,10 +41,10 @@ stages:
   - name: deploy node-red
     type: deployer
     target:
-      region_id: ibm:yp:us-south
-      organization: cfsworkload
-      space: dev
-      application: insuranceIOT-build
+      url: ${CF_TARGET_URL}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
+      application: ${CF_APP}
     script: "#!/bin/bash   \n      insightApikey=`cf env \"${CF_APP}-back-end\" |\
       \ grep apiKey -m 1 | awk '{print $2}'`\n      insightApikey=${insightApikey:1:${#insightApikey}-3}\n\
       \      insightApitoken=`cf env \"${CF_APP}-back-end\" | grep authToken | awk\
