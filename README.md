@@ -65,21 +65,26 @@ The back end Node-RED applicaton has been provisoned with the need flows. The on
 1. Naviate to {App-name}-back-end's dashboard.
 2. Click **Show Credentials** for the **dashDB** service.
 3. Copy the **username** and **password**.
-4. Navigate to the Node-RED flow by clicking on the URL at the top of the page and clicking on the **Go to your Node-RED flow editor** button.
-5. Double-click on the **DashDBRestCallToExecuteStoring** node.
-6. Check the **Use basic authentication?** box and paste the dashDB username and password.
-7. Repeat steps 5 and 6 for the **DashDBRestCallToExecuteRScript** node.
-8. Click **Deploy** in the top right of the page to save your changes.
+4. Click **Show Credentials** for the **Internet of Things Foundation** service.
+5. Copy the **apiKey** and **apiToken**.
+6. Navigate to the Node-RED flow by clicking on the URL at the top of the page and clicking on the **Go to your Node-RED flow editor** button.
+7. Double-click on the **DashDBRestCallToExecuteStoring** node.
+8. Check the **Use basic authentication?** box and paste the dashDB username and password and click **Ok**.
+9. Repeat steps 5 and 6 for the **DashDBRestCallToExecuteRScript** node.
+10. Double-click on the **IBM IoT** node.
+11. Click the **edit** button next to the **API Key** field to add a new instance.
+12. Paste the **apiKey** and **apiToken** into those fields, click **Add**, and click **Ok**.
+13. Click **Deploy** in the top right of the page to save your changes.
 
 ## Create dashDB decision tree and connect live data
 
 We now need to use Node-red to create a decision tree in **dashDB** that will be used to take our real time IOT data and do predictive analytics on the probability the IOT owner will churn from the company.
 
 1. Select 
-2.
-3.
-4.
-5.
+2. 
+3. 
+4. 
+5. 
 6. Select **DEPLOY**
 
 ## How the app works
@@ -89,6 +94,6 @@ We now need to use Node-red to create a decision tree in **dashDB** that will be
 
 In the front end web application you will see simulated IOT data being pass through. This is done by the front end server subscribing to a public broker and fowarding to data to the browser via websocket. The data is also foward to the **IoT Real-Time Insights** at the same time.
 Also there is a google map that shows local providers approved by the Inusrance company in the area of the IOT
- device in case of needed electric maitenance. This map is simulated by recieving the Longitude and Latitude of the device from **IoT Real-Time Insights** via **Node-red**. It is then used to query pre-defined provider information hosted in **dashDB**. **Node-red** also uses the data it recieves
- from **IoT Real-Time Insights** to create a decision tree in **dashDB** for our preditive analytics. The IOT data is fed into this decision tree to determine if the current electric use levels show a probability that the device owner with churn from the company, shown in the 
- **Current probability that client will churn** section of the front end. 
+device in case of needed electric maitenance. This map is simulated by recieving the Longitude and Latitude of the device from **IoT Real-Time Insights** via **Node-red**. It is then used to query pre-defined provider information hosted in **dashDB**. **Node-red** also uses the data it recieves
+from **IoT Real-Time Insights** to create a decision tree in **dashDB** for our preditive analytics. The IOT data is fed into this decision tree to determine if the current electric use levels show a probability that the device owner with churn from the company, shown in the 
+**Current probability that client will churn** section of the front end. 
