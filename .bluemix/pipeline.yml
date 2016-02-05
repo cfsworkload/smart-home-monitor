@@ -45,31 +45,14 @@ stages:
       organization: ${CF_ORGANIZATION}
       space: ${CF_SPACE}
       application: ${CF_APP}
-    script: "#!/bin/bash   \n      insightApikey=`cf env \"${CF_APP}-back-end\" |\
-      \ grep apiKey -m 1 | awk '{print $2}'`\n      insightApikey=${insightApikey:1:${#insightApikey}-3}\n\
-      \      insightApitoken=`cf env \"${CF_APP}-back-end\" | grep authToken | awk\
-      \ '{print $2}'`\n      insightApitoken=${insightApitoken:1:${#insightApitoken}-3}\n\
-      \      foundationOrg=`cf env \"${CF_APP}-back-end\" | grep org | tail -n 1 |\
-      \ awk '{print $2}'`\n      foundationOrg=${foundationOrg:1:${#foundationOrg}-2}\n\
-      \      echo \"The value in foundationOrg is ${foundationOrg}\"\n      foundationKey=`cf\
-      \ env \"${CF_APP}-back-end\" | grep apiKey | tail -n 1 | awk '{print $2}'`\n\
-      \      foundationKey=${foundationKey:1:${#foundationKey}-3}\n      echo \"The\
-      \ value in foundationKey is ${foundationKey}\"\n      foundationToken=`cf env\
-      \ \"${CF_APP}-back-end\" | grep apiToken | tail -n 1 | awk '{print $2}'`\n \
-      \     foundationToken=${foundationToken:1:${#foundationToken}-3}\n      echo\
-      \ \"The value in foundation token = ${foundationToken}\"\n      cd back-end\n\
-      \      cf create-service cloudantNoSQLDB Shared \"${CF_APP}-cloudant\"\n   \
-      \   cf create-service dashDB Entry \"${CF_APP}-dashDB\"\n      cf create-service\
-      \ erservice free \"${CF_APP}-erservice\"\n      cf create-service \"IoT Real-Time\
-      \ Insight\" Lite \"${CF_APP}-insights\"\n      # create message source in insight\
-      \ service \n      echo \"Sending rest request\"\n      #curl -X POST -H 'Content-Type:\
-      \ application/json' -u ${insightApikey}:${insightApitoken} -d '{ \"name\": \"\
-      insuranceIOT\", \"orgId\": \"'\"${foundationOrg}\"'\", \"apiKey\": \"'\"${foundationKey}\"\
-      '\", \"authToken\": \"'\"${foundationToken}\"'\", \"disabled\": \"false\" }'\
-      \ https://iotrti-prod.mam.ibmserviceengage.com/api/v2/message/source\n\n\n \
-      \     cf push \"${CF_APP}-back-end\" -n \"${CF_APP}-back-end\" --no-start\n\
-      \      cf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-cloudant\"\n     \
-      \ cf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-dashDB\"\n      cf bind-service\
-      \ \"${CF_APP}-back-end\" \"${CF_APP}-erservice\"\n      cf bind-service \"${CF_APP}-back-end\"\
-      \ \"${CF_APP}-iotf-service\"\n      cf bind-service \"${CF_APP}-back-end\" \"\
-      ${CF_APP}-insights\"\n      cf start \"${CF_APP}-back-end\""
+    script: "#!/bin/bash   \n      cd back-end\n      cf create-service cloudantNoSQLDB\
+      \ Shared \"${CF_APP}-cloudant\"\n      cf create-service dashDB Entry \"${CF_APP}-dashDB\"\
+      \n      cf create-service erservice free \"${CF_APP}-erservice\"\n      cf create-service\
+      \ \"IoT Real-Time Insight\" Lite \"${CF_APP}-insights\"\n      # create message\
+      \ source in insight service \n      echo \"Sending rest request\"\n      cf\
+      \ push \"${CF_APP}-back-end\" -n \"${CF_APP}-back-end\" --no-start\n      cf\
+      \ bind-service \"${CF_APP}-back-end\" \"${CF_APP}-cloudant\"\n      cf bind-service\
+      \ \"${CF_APP}-back-end\" \"${CF_APP}-dashDB\"\n      cf bind-service \"${CF_APP}-back-end\"\
+      \ \"${CF_APP}-erservice\"\n      cf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-iotf-service\"\
+      \n      cf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-insights\"\n    \
+      \  cf start \"${CF_APP}-back-end\""
