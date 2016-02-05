@@ -202,12 +202,13 @@ function initServiceProviderTable() {
 							geolocation = 'invalid index';
 					}
 
-					var insertStatement = 'INSERT INTO "' + dashDBuser + '"."SERVICE_PROVIDERS" (PROVIDER_ID,PROVIDER_NAME,PROVIDER_LOCATION) VALUES (' + i + ', \'Provider ' + i + '\', DB2GSE.ST_POINT(' + geolocation + '));';
+					db.open(dashDBcredentials.dsn,function(err,conn) {
+						var insertStatement = 'INSERT INTO "' + dashDBuser + '"."SERVICE_PROVIDERS" (PROVIDER_ID,PROVIDER_NAME,PROVIDER_LOCATION) VALUES (' + i + ', \'Provider ' + i + '\', DB2GSE.ST_POINT(' + geolocation + '));';
 
-					console.log("attempting to insert data...");
-					console.log("insert statement: " + insertStatement);
-					db.openSync(dashDBcredentials.dsn,function(err,conn) {
-						conn.prepareSync(insertStatement, function (err, stmt) {
+						console.log("attempting to insert data...");
+						console.log("insert statement: " + insertStatement);
+
+						conn.prepare(insertStatement, function (err, stmt) {
 							if (err) console.log(err);
 
 							//Bind and Execute the statment asynchronously
@@ -215,10 +216,10 @@ function initServiceProviderTable() {
 								if(err) console.log(err);
 
 								//Close the connection
-								conn.closeSync(function(err) {
-								if(err) console.log("Problem disconnecting from dashDB");
-								else console.log("Connection closed successfully.");
-				});
+								conn.close(function(err) {
+									if(err) console.log("Problem disconnecting from dashDB");
+									else console.log("Connection closed successfully.");
+								});
 							});
 						});
 					});
