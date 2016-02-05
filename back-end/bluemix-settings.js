@@ -203,12 +203,12 @@ function initServiceProviderTable() {
 					}
 
 					db.open(dashDBcredentials.dsn,function(err,conn) {
-						var insertStatement = 'INSERT INTO "' + dashDBuser + '"."SERVICE_PROVIDERS" (PROVIDER_ID,PROVIDER_NAME,PROVIDER_LOCATION) VALUES (' + i + ', \'Provider ' + i + '\', DB2GSE.ST_POINT(' + geolocation + '));';
+						/*var insertStatement = ;
 
 						console.log("attempting to insert data...");
-						console.log("insert statement: " + insertStatement);
+						console.log("insert statement: " + insertStatement);*/
 
-						conn.prepare(insertStatement, function (err, stmt) {
+						conn.prepare('INSERT INTO "' + dashDBuser + '"."SERVICE_PROVIDERS" (PROVIDER_ID,PROVIDER_NAME,PROVIDER_LOCATION) VALUES (' + i + ', \'Provider ' + i + '\', DB2GSE.ST_POINT(' + geolocation + '));', function (err, stmt) {
 							if (err) console.log(err);
 
 							//Bind and Execute the statment asynchronously
