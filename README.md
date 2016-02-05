@@ -1,7 +1,7 @@
 # Workload - Insurance IOT
 
 ## Learn how to use IOT data to simulate insurance use cases
-The Insurance IOT app shows how you can use the **Internet of Things Foundation**, **IoT Real-Time Insights**, and **dashDB** services to simulate grabbing IOT data from a broker and using it to provide meaniful real time data simulating Insurance company use.
+The Insurance IOT app shows how you can use the **IoT Real-Time Insights**, **IoT Real-Time Insights**, and **dashDB** services to simulate grabbing IOT data from a broker and using it to provide meaniful real time data simulating Insurance company use.
 
 ## Introduction
 This Insurance IOT app has been created so you can deploy it into your personal DevOps space after signing up for Bluemix and DevOps Services. When you deploy the pipeline to Bluemix, the **Internet of Things Foundation**, **IoT Real-Time Insights**, and **dashDB** services will be created, two cloud foundry applications are created, and services trained.
@@ -30,6 +30,8 @@ After the pipeline has been configured, you can monitor the deployment in DevOps
 Once the deployment finishes, you will have an instance of the Watson Conversation app in your Bluemix Dashboard.
 
 ## Add email to IoT Real-Time Insights service notifications
+
+The **IoT Real-Time Insights** service has been created and connected the data from the simulated IOT device **IoT Real-Time Insights**
 
 ## Create dashDB decision tree and connect live data
 

@@ -17,7 +17,8 @@
 		"node-red-nodes-cf-sqldb-dashdb":"0.x",
         "request":"~2.36.0",
         "js2xmlparser":"~0.1.3",
-        "getmac":"1.0.x"
+        "getmac":"1.0.x",
+        "ibm_db": "*"
     },
     "engines": {
         "node": "0.10.x"
