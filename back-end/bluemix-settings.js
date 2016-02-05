@@ -130,8 +130,6 @@ function initServiceProviderTable() {
 
 		conn.prepare(createTableStatement, function (err, stmt) {
 			if (err) {
-				// error, probably because table already exists
-				// insert data
 				return conn.closeSync();
 			}
 
@@ -208,13 +206,19 @@ function initServiceProviderTable() {
 
 					console.log("attempting to insert data...");
 					console.log("insert statement: " + insertStatement);
-					db.open(dashDBcredentials.dsn,function(err,conn){
+					db.openSync(dashDBcredentials.dsn,function(err,conn) {
 						conn.prepareSync(insertStatement, function (err, stmt) {
 							if (err) console.log(err);
 
 							//Bind and Execute the statment asynchronously
 							stmt.execute(['something', 42], function (err, result) {
 								if(err) console.log(err);
+
+								//Close the connection
+								conn.closeSync(function(err) {
+								if(err) console.log("Problem disconnecting from dashDB");
+								else console.log("Connection closed successfully.");
+				});
 							});
 						});
 					});
