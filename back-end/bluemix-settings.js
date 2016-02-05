@@ -130,6 +130,7 @@ function initServiceProviderTable() {
 
 		conn.prepare(createTableStatement, function (err, stmt) {
 			if (err) {
+				console.log(err);
 				return conn.closeSync();
 			}
 
@@ -137,93 +138,37 @@ function initServiceProviderTable() {
 			stmt.execute(['something', 42], function (err, result) {
 				if(err) console.log(err);
 
-				//Close the connection
-				conn.closeSync(function(err) {
-					if(err) console.log("Problem disconnecting from dashDB");
-					else console.log("Connection closed successfully.");
-				});
-
-
 				var dashDBuser = (vcapServices.dashDB[0].credentials.username).toUpperCase();
 
-				for(var i = 1; i <= 16; i++) {
-					var geolocation;
+				var insert = 'INSERT INTO "'  + dashDBuser + '"."SERVICE_PROVIDERS" (PROVIDER_ID,PROVIDER_NAME,PROVIDER_LOCATION) VALUES ?';
+				var values = [
+					[1, 'Provider 1', 'DB2GSE.ST_POINT(37.3251750001,-122.0215519999,1005)'],
+					[2, 'Provider 2', 'DB2GSE.ST_POINT(37.3004120003,-122.0283650002,1005)'],
+					[3, 'Provider 3', 'DB2GSE.ST_POINT(37.2995239998,-122.0095680004,1005)'],
+					[4, 'Provider 4', 'DB2GSE.ST_POINT(37.2857990000,-121.9658370000,1005)'],
+					[5, 'Provider 5', 'DB2GSE.ST_POINT(37.3357700004,-121.9958780004,1005)'],
+					[6, 'Provider 6', 'DB2GSE.ST_POINT(37.3247139996,-121.9909000001,1005)'],
+					[7, 'Provider 7', 'DB2GSE.ST_POINT(37.3496910002,-121.9773389998,1005)'],
+					[8, 'Provider 8', 'DB2GSE.ST_POINT(37.3507820002,-121.9914149996,1005)'],
+					[9, 'Provider 9', 'DB2GSE.ST_POINT(37.3505090002,-121.9194890003,1005)'],
+					[10, 'Provider 10', 'DB2GSE.ST_POINT(37.3507820002,-121.9210339996,1005)'],
+					[11, 'Provider 11', 'DB2GSE.ST_POINT(37.3951189997,-121.9208619998,1005)'],
+					[12, 'Provider 12', 'DB2GSE.ST_POINT(37.3956639997,-121.9821450002,1005)'],
+					[13, 'Provider 13', 'DB2GSE.ST_POINT(37.4263429998,-121.9071220002,1005)'],
+					[14, 'Provider 14', 'DB2GSE.ST_POINT(37.4352030001,-121.8997480001,1005)'],
+					[15, 'Provider 15', 'DB2GSE.ST_POINT(37.4658660004,-121.9165709998,1005)'],
+					[16, 'Provider 16', 'DB2GSE.ST_POINT(37.4773100003,-121.9610309996,1005)']
+				];
 
-					switch(i) {
-						case 1:
-							geolocation = '37.3251750001,-122.0215519999,1005';
-							break;
-						case 2:
-							geolocation = '37.3004120003,-122.0283650002,1005';
-							break;
-						case 3:
-							geolocation = '37.2995239998,-122.0095680004,1005';
-							break;
-						case 4:
-							geolocation = '37.2857990000,-121.9658370000,1005';
-							break;
-						case 5:
-							geolocation = '37.3357700004,-121.9958780004,1005';
-							break;
-						case 6:
-							geolocation = '37.3247139996,-121.9909000001,1005';
-							break;
-						case 7:
-							geolocation = '37.3496910002,-121.9773389998,1005';
-							break;
-						case 8:
-							geolocation = '37.3507820002,-121.9914149996,1005';
-							break;
-						case 9:
-							geolocation = '37.3505090002,-121.9194890003,1005';
-							break;
-						case 10:
-							geolocation = '37.3507820002,-121.9210339996,1005';
-							break;
-						case 11:
-							geolocation = '37.3951189997,-121.9208619998,1005';
-							break;
-						case 12:
-							geolocation = '37.3956639997,-121.9821450002,1005';
-							break;
-						case 13:
-							geolocation = '37.4263429998,-121.9071220002,1005';
-							break;
-						case 14:
-							geolocation = '37.4352030001,-121.8997480001,1005';
-							break;
-						case 15:
-							geolocation = '37.4658660004,-121.9165709998,1005';
-							break;
-						case 16:
-							geolocation = '37.4773100003,-121.9610309996,1005';
-							break;
-						default:
-							geolocation = 'invalid index';
-					}
+				conn.query(insert, [values], function(err) {
+					if(err) console.log(err);
 
-					db.open(dashDBcredentials.dsn,function(err,conn) {
-						/*var insertStatement = ;
-
-						console.log("attempting to insert data...");
-						console.log("insert statement: " + insertStatement);*/
-
-						conn.prepare('INSERT INTO "' + dashDBuser + '"."SERVICE_PROVIDERS" (PROVIDER_ID,PROVIDER_NAME,PROVIDER_LOCATION) VALUES (' + i + ', \'Provider ' + i + '\', DB2GSE.ST_POINT(' + geolocation + '));', function (err, stmt) {
-							if (err) console.log(err);
-
-							//Bind and Execute the statment asynchronously
-							stmt.execute(['something', 42], function (err, result) {
-								if(err) console.log(err);
-
-								//Close the connection
-								conn.close(function(err) {
-									if(err) console.log("Problem disconnecting from dashDB");
-									else console.log("Connection closed successfully.");
-								});
-							});
-						});
+					//Close the connection
+					conn.closeSync(function(err) {
+						if(err) console.log("Problem disconnecting from dashDB");
+						else console.log("Connection closed successfully.");
 					});
-				}
+				});
 			});
 		});
 	});
