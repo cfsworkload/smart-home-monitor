@@ -209,7 +209,7 @@ function initServiceProviderTable() {
 					console.log("attempting to insert data...");
 					console.log("insert statement: " + insertStatement);
 					db.open(dashDBcredentials.dsn,function(err,conn){
-						conn.prepare(insertStatement, function (err, stmt) {
+						conn.prepareSync(insertStatement, function (err, stmt) {
 							if (err) console.log(err);
 
 							//Bind and Execute the statment asynchronously
