@@ -46,12 +46,11 @@ var mapOptions = {
 };
 var map;
 
-var socketaddy = "ws://insuranceiot-build-back-end.mybluemix.net/ServiceProviders";
+var socketSP = "ws://insuranceiot-build-22-back-end.mybluemix.net/ServiceProviders";
 var message = "....";
 $(document).ready(function(){
-
   $('#output').text = message;
-  sock = new WebSocket(socketaddy);
+  sock = new WebSocket(socketSP);
   sock.onopen = function(){
     console.log("Connected websocket");
   };
@@ -87,6 +86,25 @@ $(document).ready(function(){
       addMarker(counter.LATITUDE,counter.LONGITUDE);
       document.getElementById('map-canvas').style.visibility='visible';
     }
+  };
+});
+
+var socketScoring = "ws://insuranceiot-build-22-back-end.mybluemix.net/ws/scoring";
+$(document).ready(function(){
+  sock = new WebSocket(socketScoring);
+  sock.onopen = function(){
+    console.log("Connected websocket");
+  };
+  sock.onerror = function(){ 
+    console.log("Websocket error"); 
+  };
+  sock.onclose = function () {};
+
+  sock.onmessage = function(evt){
+    console.log("Websocket message", evt); 
+    var boolean = evt.data;
+    // Create table.
+    $('.boolean').html(boolean);
   };
 });
 
