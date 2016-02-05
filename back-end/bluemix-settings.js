@@ -148,7 +148,7 @@ function initServiceProviderTable() {
 
 				var dashDBuser = (vcapServices.dashDB[0].credentials.username).toUpperCase();
 
-				for(int i = 1; i <= 16; i++) {
+				for(var i = 1; i <= 16; i++) {
 					var geolocation;
 
 					switch(i) {
