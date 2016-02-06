@@ -24,12 +24,12 @@ stages:
       url: ${CF_TARGET_URL}
       organization: ${CF_ORGANIZATION}
       space: ${CF_SPACE}
-      application: ${CF_APP}
+      application: ${CF_APP} 
     script: "#!/bin/bash\n\ncd front-end\nhostname=\"${CF_APP}.mybluemix.net\"\ncf\
       \ create-service cloudantNoSQLDB Shared \"${CF_APP}-cloudant\"\ncf create-service\
       \ iotf-service iotf-service-free \"${CF_APP}-iotf-service\"\ncf push \"${CF_APP}-front-end\"\
       \ -n \"${CF_APP}-front-end\" --no-start\ncf set-env \"${CF_APP}-front-end\"\
-      \ HOSTNAME $hostname\ncf bind-service \"${CF_APP}-front-end\" \"${CF_APP}-cloudant\"\
+      \ HOSTNAME $hostname\ncf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-cloudant\"\
       \ \ncf bind-service \"${CF_APP}-front-end\" \"${CF_APP}-iotf-service\"\ncf start\
       \ \"${CF_APP}-front-end\""
 - name: deploy back-end
@@ -37,6 +37,8 @@ stages:
   - type: job
     stage: build
     job: Build
+  triggers:
+  - type: stage
   jobs:
   - name: deploy node-red
     type: deployer
@@ -44,15 +46,62 @@ stages:
       url: ${CF_TARGET_URL}
       organization: ${CF_ORGANIZATION}
       space: ${CF_SPACE}
-      application: ${CF_APP}
+      application: ${CF_APP} 
     script: "#!/bin/bash   \n      cd back-end\n      cf create-service cloudantNoSQLDB\
-      \ Shared \"${CF_APP}-cloudant\"\n      cf create-service dashDB Entry \"${CF_APP}-dashDB\"\
-      \n      cf create-service erservice free \"${CF_APP}-erservice\"\n      cf create-service\
-      \ \"IoT Real-Time Insight\" Lite \"${CF_APP}-insights\"\n      # create message\
-      \ source in insight service \n      echo \"Sending rest request\"\n      cf\
-      \ push \"${CF_APP}-back-end\" -n \"${CF_APP}-back-end\" --no-start\n      cf\
-      \ bind-service \"${CF_APP}-back-end\" \"${CF_APP}-cloudant\"\n      cf bind-service\
-      \ \"${CF_APP}-back-end\" \"${CF_APP}-dashDB\"\n      cf bind-service \"${CF_APP}-back-end\"\
-      \ \"${CF_APP}-erservice\"\n      cf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-iotf-service\"\
-      \n      cf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-insights\"\n    \
-      \  cf start \"${CF_APP}-back-end\""
+      \ Shared \"insuranceIOT-build-cloudant\"\n      cf create-service dashDB Entry\
+      \ \"insuranceIOT-build-dashDB\"\n      cf create-service erservice free \"insuranceIOT-build-erservice\"\
+      \n      cf push \"${CF_APP}-back-end\" -n \"${CF_APP}-back-end\" --no-start\n\
+      \      cf bind-service \"${CF_APP}-back-end\" \"insuranceIOT-build-cloudant\"\
+      \n      cf bind-service \"${CF_APP}-back-end\" \"insuranceIOT-build-dashDB\"\
+      \n      cf bind-service \"${CF_APP}-back-end\" \"insuranceIOT-build-erservice\"\
+      \n      cf bind-service \"${CF_APP}-back-end\" \"insuranceIOT-build-iotf-service\"\
+      \n      cf bind-service \"${CF_APP}-back-end\" \"insuranceIOT-build-insights\"\
+      \n      \n      # set up Insights service \n\n      insightApikey=`cf env \"\
+      ${CF_APP}-back-end\" | grep apiKey -m 1 | awk '{print $2}'`\n      insightApikey=${insightApikey:1:${#insightApikey}-3}\n\
+      \      insightApitoken=`cf env \"${CF_APP}-back-end\" | grep authToken | awk\
+      \ '{print $2}'`\n      insightApitoken=${insightApitoken:1:${#insightApitoken}-3}\n\
+      \      foundationOrg=`cf env \"${CF_APP}-back-end\" | grep org | tail -n 1 |\
+      \ awk '{print $2}'`\n      foundationOrg=${foundationOrg:1:${#foundationOrg}-2}\n\
+      \      echo \"The value in foundationOrg is ${foundationOrg}\"\n      foundationKey=`cf\
+      \ env \"${CF_APP}-back-end\" | grep apiKey | tail -n 1 | awk '{print $2}'`\n\
+      \      foundationKey=${foundationKey:1:${#foundationKey}-3}\n      echo \"The\
+      \ value in foundationKey is ${foundationKey}\"\n      foundationToken=`cf env\
+      \ \"${CF_APP}-back-end\" | grep apiToken | tail -n 1 | awk '{print $2}'`\n \
+      \     foundationToken=${foundationToken:1:${#foundationToken}-3}\n      echo\
+      \ \"The value in foundation token = ${foundationToken}\" \n\n      messageID=`curl\
+      \ -X POST -H 'Content-Type: application/json' -u ${insightApikey}:${insightApitoken}\
+      \ -d '{ \"name\": \"insuranceIOT\", \"orgId\": \"'\"${foundationOrg}\"'\", \"\
+      apiKey\": \"'\"${foundationKey}\"'\", \"authToken\": \"'\"${foundationToken}\"\
+      '\", \"disabled\": \"false\" }' https://iotrti-prod.mam.ibmserviceengage.com/api/v2/message/source`\n\
+      \      messageID=`echo $messageID | awk -F\",\" '{print $6}' | awk -F\":\" '{print\
+      \ $2}'\n`\n      messageID=${messageID:1:${#messageID}-2}\n      echo \"The\
+      \ value in messageID is = ${messageID}\"\n      messageSchema=`curl -X POST\
+      \ -H 'Content-Type: application/json' -u ${insightApikey}:${insightApitoken}\
+      \ -d '{ \"name\": \"PowerUsage\", \"format\": \"JSON\", \"items\": [ {\"name\"\
+      : \"d\", \"type\": \"struct\", \"subItems\": [ {\"name\": \"power\", \"type\"\
+      : \"int\"}, {\"name\": \"maxpower\", \"type\": \"int\"}, {\"name\": \"DeviceID\"\
+      , \"type\": \"string\"}, {\"name\": \"LocLat\", \"type\": \"float\"}, {\"name\"\
+      : \"LocLong\", \"type\": \"float\"}, {\"name\": \"policyID\", \"type\": \"int\"\
+      }]} ]}' https://iotrti-prod.mam.ibmserviceengage.com/api/v2/message/schema`\n\
+      \      messageSchema=`echo $messageSchema | awk -F\"JSON\" '{print $2}' | awk\
+      \ -F\",\" '{print $3}' | awk -F\":\" '{print $2}'`\n      messageSchema=${messageSchema:1:${#messageSchema}-2}\n\
+      \      echo \"The value in messageSchema is = ${messageSchema}\"\n      messageRoute=`curl\
+      \ -X POST -H 'Content-Type: application/json' -u ${insightApikey}:${insightApitoken}\
+      \ -d '{ \"sourceId\": \"'\"${messageID}\"'\", \"deviceType\": \"sensor\", \"\
+      eventType\": \"+\", \"schemaId\": \"'\"${messageSchema}\"'\" }' https://iotrti-prod.mam.ibmserviceengage.com/api/v2/message/route`\
+      \ \n      messageRoute=`echo $messageRoute | awk -F\",\" '{print $5}' | awk\
+      \ -F\":\" '{print $2}'`\n      messageRoute=${messageRoute:1:${#messageRoute}-2}\n\
+      \      echo \"The value in messageRoute = ${messageRoute}\"\n      actionID=`curl\
+      \ -X POST -H 'Content-Type: application/json' -u ${insightApikey}:${insightApitoken}\
+      \ -d '{ \"type\": \"mail\", \"name\": \"email action\", \"description\": \"\
+      Sending email when a watts is over 5000.\", \"fields\": { \"to\": \"replaceme@ibm.com\"\
+      \ }}' https://iotrti-prod.mam.ibmserviceengage.com/api/v2/action` \n      echo\
+      \ ${actionID}\n      actionID=`echo $actionID | awk -F\",\" '{print $6}' | awk\
+      \ -F\":\" '{print $2}'`\n      actionID=${actionID:1:${#actionID}-2}\n     \
+      \ echo \"the value in actionID = ${actionID}\" \n      \n      curl -X POST\
+      \ -H 'Content-Type: application/json' -u ${insightApikey}:${insightApitoken}\
+      \ -d '{ \"name\": \"highPower\", \"description\": \"high power usage\", \"disabled\"\
+      : false, \"severity\": \"4\", \"messageSchemas\": [\"'\"${messageSchema}\"'\"\
+      ], \"condition\": \"PowerUsage.d.power > \\\"5000\\\"\", \"actions\": [ \"'\"\
+      ${actionID}\"'\" ]}' https://iotrti-prod.mam.ibmserviceengage.com/api/v2/rule\n\
+      \n\n      cf start \"${CF_APP}-back-end\" \n\n"
