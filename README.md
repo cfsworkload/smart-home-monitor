@@ -60,7 +60,7 @@ We now need to import all of our sample data into dashDB.
 
 ## Add Bluemix credentials to Node-RED
 
-The back end Node-RED applicaton has been provisoned with the need flows. The only thing missing is the credentials to **dashDB**.
+The back end Node-RED applicaton has been provisoned with the need flows. The only thing missing is the credentials to **dashDB** and **IoT Real-Time Insights**.
 
 1. Naviate to {App-name}-back-end's dashboard.
 2. Click **Show Credentials** for the **dashDB** service.
