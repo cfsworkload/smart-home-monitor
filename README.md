@@ -32,14 +32,20 @@ Once the deployment finishes, you will have an instance of the Watson Conversati
 
 ## Add email to IoT Real-Time Insights service notifications
 
-The **IoT Real-Time Insights** service has been created and connected to the data from the simulated IOT device hosted in the **IoT Real-Time Insights** service.
-We need to add an email address to recieve the alert messages when the high energy threshold is reached. 
+The **IoT Real-Time Insights** service has been created and connected to the data from the simulated IOT device hosted in the **IoT Real-Time Insights** service. The Create a Message Source, Create a Message Schema,
+Create Message Route, Create an Action, and the creating of a rule is done in the **deploy back-end** tile of the devOps pipeline using the service's REST API. We need to add an email address to recieve the alert messages when the high energy threshold is reached.
+ 
 
-1. asdad
-2.
-3.
+1. Naviate to {App-name}-back-end's dashboard.
+2. Select **IoT Real-Time Insights** and click **Launch IoT Real-Time Insights Deashboard**
+3. Select the **Analytics** tab at the top right
+4. Click into **email action** box
+5. Select the edit pencil next to the email action
+6. Put an email in the **To** field and provide a Subject
+7. Check the **Prepend with "IoT Real-Time Insights alert"** box 
+8. Click **OK** and then **SAVE** at top right 
 
-Now when a threshold is broken, an email notification will be sent to the specified email alerting about the high energy use. 
+Now when a threshold is broken, an email notification will be sent to the specified email alerting about the high energy use. You can also see the alerts on the Insights dashboard for the insurance-01 device. 
 
 ## Import tables into dashDB
 
