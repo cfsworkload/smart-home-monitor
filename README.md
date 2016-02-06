@@ -58,9 +58,11 @@ We now need to import all of our sample data into dashDB.
 11. Select **Create a new table and load** and click **Next**, and then click **Finish**.
 12. Edit the DDL statement. For **SERVICE_PROVIDERS.csv**, use `create table SERVICE_PROVIDERS(PROVIDER_ID INT, PROVIDER_NAME VARCHAR(30), PROVIDER_LOCATION DB2GSE.ST_POINT) organize by row;` For **MINING_IN.csv**, use `create table MINING_IN(CUSTOMER_ID INT, HOUSEHOLD_SIZE INT, MONTHLY_ENERGY_COST INT, DEVICE_ENERGY_RATING INT, NO_CUSTSERV_CALLS INT, CHURNED VARCHAR(10));`
 
-## Add Bluemix credentials to Node-RED
 
-The back end Node-RED applicaton has been provisoned with the need flows. The only thing missing is the credentials to **dashDB** and **IoT Real-Time Insights**.
+## Create dashDB decision tree and add Bluemix credentials to Node-RED 
+
+The back end Node-RED applicaton has been provisoned with the need flows. The only thing missing is the credentials to **dashDB** and **IoT Real-Time Insights** and creating the decision 
+tree in dashDB for our predictive analytics.
 
 1. Naviate to {App-name}-back-end's dashboard.
 2. Click **Show Credentials** for the **dashDB** service.
@@ -70,29 +72,22 @@ The back end Node-RED applicaton has been provisoned with the need flows. The on
 6. Navigate to the Node-RED flow by clicking on the URL at the top of the page and clicking on the **Go to your Node-RED flow editor** button.
 7. Double-click on the **DashDBRestCallToExecuteStoring** node.
 8. Check the **Use basic authentication?** box and paste the dashDB username and password and click **Ok**.
-9. Repeat steps 5 and 6 for the **DashDBRestCallToExecuteRScript** node.
-10. Double-click on the **IBM IoT** node.
+9. Repeat steps 5 and 6 for the **DashDBRestCallToExecuteRScript** node and click **Deploy** at the top right
+10. Click the inject button next to the **Create dashDB tree** node to send the request to have the decision tree created
+10. To connect live data drag an  **IBM IoT** node from the left side bar menu to **Flow 1** and then double click on it to bring up the configuration menu.
 11. Click the **edit** button next to the **API Key** field to add a new instance.
-12. Paste the **apiKey** and **apiToken** into those fields, click **Add**, and click **Ok**.
+12. Name it, Paste the **Internet of Things Foundation**  **apiKey** and **apiToken** into those fields, click **Add**
+13. In the **Device Id** text box type **insurance-01** and then click **Ok** at the bottom
+13. Connect the **IBM IoT** to the **convertPayload** and **extract location** nodes
 13. Click **Deploy** in the top right of the page to save your changes.
 
-## Create dashDB decision tree and connect live data
-
-We now need to use Node-red to create a decision tree in **dashDB** that will be used to take our real time IOT data and do predictive analytics on the probability the IOT owner will churn from the company.
-
-1. Select 
-2. 
-3. 
-4. 
-5. 
-6. Select **DEPLOY**
 
 ## How the app works
 
 1. Go to your Bluemix dashboard and select the {App-name}-front-end newly created CF application
 2. Click the route at the top of the screen see the real time data being passed through
 
-In the front end web application you will see simulated IOT data being pass through. This is done by the front end server subscribing to a public broker and fowarding to data to the browser via websocket. The data is also foward to the **IoT Real-Time Insights** at the same time.
+In the front end web application you will see simulated IOT data being pass through. This is done by the front end server subscribing to a public broker and fowarding to data to the browser via websocket in the node.js source code found in /front-end/app.js. The data is also foward to the **IoT Real-Time Insights** at the same time.
 Also there is a google map that shows local providers approved by the Inusrance company in the area of the IOT
 device in case of needed electric maitenance. This map is simulated by recieving the Longitude and Latitude of the device from **IoT Real-Time Insights** via **Node-red**. It is then used to query pre-defined provider information hosted in **dashDB**. **Node-red** also uses the data it recieves
 from **IoT Real-Time Insights** to create a decision tree in **dashDB** for our preditive analytics. The IOT data is fed into this decision tree to determine if the current electric use levels show a probability that the device owner with churn from the company, shown in the 
