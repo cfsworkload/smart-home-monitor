@@ -24,12 +24,13 @@ stages:
       url: ${CF_TARGET_URL}
       organization: ${CF_ORGANIZATION}
       space: ${CF_SPACE}
-      application: ${CF_APP} 
-    script: "#!/bin/bash\n\ncd front-end\nhostname=\"${CF_APP}.mybluemix.net\"\ncf\
-      \ create-service cloudantNoSQLDB Shared \"${CF_APP}-cloudant\"\ncf create-service\
-      \ iotf-service iotf-service-free \"${CF_APP}-iotf-service\"\ncf push \"${CF_APP}-front-end\"\
+      application: ${CF_APP}
+    script: "#!/bin/bash\n\ncd front-end\nsed -i 's/insuranceiot-build-22-back-end.mybluemix.net/'${CF_APP}'-back-end.mybluemix.net/g'\
+      \ public/javascript/scripts.js\nhostname=\"${CF_APP}.mybluemix.net\"\ncf create-service\
+      \ cloudantNoSQLDB Shared \"${CF_APP}-cloudant\"\ncf create-service iotf-service\
+      \ iotf-service-free \"${CF_APP}-iotf-service\"\ncf push \"${CF_APP}-front-end\"\
       \ -n \"${CF_APP}-front-end\" --no-start\ncf set-env \"${CF_APP}-front-end\"\
-      \ HOSTNAME $hostname\ncf bind-service \"${CF_APP}-front-end\" \"${CF_APP}-cloudant\"\
+      \ HOSTNAME $hostname\ncf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-cloudant\"\
       \ \ncf bind-service \"${CF_APP}-front-end\" \"${CF_APP}-iotf-service\"\ncf start\
       \ \"${CF_APP}-front-end\""
 - name: deploy back-end
@@ -46,18 +47,18 @@ stages:
       url: ${CF_TARGET_URL}
       organization: ${CF_ORGANIZATION}
       space: ${CF_SPACE}
-      application: ${CF_APP} 
+      application: ${CF_APP}  
     script: "#!/bin/bash   \n      cd back-end\n      cf create-service cloudantNoSQLDB\
-      \ Shared \"${CF_APP}-cloudant\"\n      cf create-service dashDB Entry \"${CF_APP}-dashDB\"\
-      \n      cf create-service erservice free \"${CF_APP}-erservice\"\n      cf create-service\
-      \ \"IoT Real-Time Insight\" Lite \"${CF_APP}-insights\"\n      cf push \"${CF_APP}-back-end\"\
-      \ -n \"${CF_APP}-back-end\" --no-start\n      cf bind-service \"${CF_APP}-back-end\"\
-      \ \"${CF_APP}-cloudant\"\n      cf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-dashDB\"\
-      \n      cf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-erservice\"\n   \
-      \   cf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-iotf-service\"\n    \
-      \  cf bind-service \"${CF_APP}-back-end\" \"${CF_APP}-insights\"\n      \n \
-      \     # set up Insights service \n\n      insightApikey=`cf env \"${CF_APP}-back-end\"\
-      \ | grep apiKey -m 1 | awk '{print $2}'`\n      insightApikey=${insightApikey:1:${#insightApikey}-3}\n\
+      \ Shared \"insuranceIOT-build-cloudant\"\n      cf create-service dashDB Entry\
+      \ \"insuranceIOT-build-dashDB\"\n      cf create-service erservice free \"insuranceIOT-build-erservice\"\
+      \n      cf push \"${CF_APP}-back-end\" -n \"${CF_APP}-back-end\" --no-start\n\
+      \      cf bind-service \"${CF_APP}-back-end\" \"insuranceIOT-build-cloudant\"\
+      \n      cf bind-service \"${CF_APP}-back-end\" \"insuranceIOT-build-dashDB\"\
+      \n      cf bind-service \"${CF_APP}-back-end\" \"insuranceIOT-build-erservice\"\
+      \n      cf bind-service \"${CF_APP}-back-end\" \"insuranceIOT-build-iotf-service\"\
+      \n      cf bind-service \"${CF_APP}-back-end\" \"insuranceIOT-build-insights\"\
+      \n      \n      # set up Insights service \n\n      insightApikey=`cf env \"\
+      ${CF_APP}-back-end\" | grep apiKey -m 1 | awk '{print $2}'`\n      insightApikey=${insightApikey:1:${#insightApikey}-3}\n\
       \      insightApitoken=`cf env \"${CF_APP}-back-end\" | grep authToken | awk\
       \ '{print $2}'`\n      insightApitoken=${insightApitoken:1:${#insightApitoken}-3}\n\
       \      foundationOrg=`cf env \"${CF_APP}-back-end\" | grep org | tail -n 1 |\
