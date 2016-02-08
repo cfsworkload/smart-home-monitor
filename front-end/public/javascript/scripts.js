@@ -46,7 +46,7 @@ var mapOptions = {
 };
 var map;
 
-var socketSP = "ws://insuranceiot-build-22-back-end.mybluemix.net/ServiceProviders";
+var socketSP = "ws://insuranceiot-build-wprichar-1139-back-end.mybluemix.net/ServiceProviders";
 var message = "....";
 $(document).ready(function(){
   $('#output').text = message;
@@ -89,7 +89,7 @@ $(document).ready(function(){
   };
 });
 
-var socketScoring = "ws://insuranceiot-build-22-back-end.mybluemix.net/ws/scoring";
+var socketScoring = "ws://insuranceiot-build-wprichar-1139-back-end.mybluemix.net/ws/scoring";
 $(document).ready(function(){
   sock = new WebSocket(socketScoring);
   sock.onopen = function(){

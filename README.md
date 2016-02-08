@@ -93,6 +93,11 @@ tree in dashDB for our predictive analytics.
 16. Name it, Paste the **Internet of Things Foundation**  **apiKey** and **apiToken** into those fields, click **Add**
 17. In the **Device Id** text box type **insurance-01** and then click **Ok** at the bottom
 18. Connect the **IBM IoT** node to the **convertPayload** and **extract location** nodes
+19. Grab a output **websocket** from the left side bar node menu and drag it onto **Flow 1**
+20. Double-click on it and click edit on the **Path** drop-down 
+21. For the **Path** put **/ServiceProviders** and leave other field default. Press **Update** and **Ok**
+22. Connect this node to the output of the **ExtractScoringResults** node
+23. Repeat steps 19 through 22 only for path put **/ws/scoring** and connect the node to the output of **DashDBRestCallToExecuteRScript**
 19. Click **Deploy** in the top right of the page to save your changes.
 
 
