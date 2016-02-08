@@ -64,8 +64,11 @@ We now need to import all of our sample data into dashDB.
 8. Click **Browse files** and select **MINING_INPUT.csv**.
 9. Leave the default settings for the column names, code page, separator character, and date/time the same.
 10. Click **Preview** and **Next**.
-11. Select **Create a new table and load** and click **Next**, and then click **Finish**.
+11. Select **Load into an existing table* and click **Next**
+12. Select the **MINING_IN** table and then click **Finish**.
 
+
+The the MINING_IN and SERVICE_PROVIDER tables have been created and populated. Now the node-red needs to be set up.
 
 ## Create dashDB decision tree and add Bluemix credentials to Node-RED 
 
@@ -74,21 +77,23 @@ tree in dashDB for our predictive analytics.
 
 1. Naviate to {App-name}-back-end's dashboard.
 2. Click **Show Credentials** for the **dashDB** service.
-3. Copy the **username** and **password**.
+3. Copy the **username**, **https_url**, and the **password**.
 4. Click **Show Credentials** for the **Internet of Things Foundation** service.
 5. Copy the **apiKey** and **apiToken**.
 6. Navigate to the Node-RED flow by clicking on the URL at the top of the page and clicking on the **Go to your Node-RED flow editor** button.
-7. Double-click on the **DashDBRestCallToExecuteStoring** node.
-8. Check the **Use basic authentication?** box and paste the dashDB username and password and click **Ok**.
-9. Repeat steps 5 and 6 for the **DashDBRestCallToExecuteRScript** node and click **Deploy** at the top right
-10. Click the inject button next to the **Create dashDB tree** node to send the request to have the decision tree created
-10. To connect live data drag an  **IBM IoT** node from the left side bar menu to **Flow 1** and then double click on it to bring up the configuration menu.
-11. In the **Authentication** drop down select **API** Key
-11. Click the **edit** button next to the **API Key** field to add a new instance.
-12. Name it, Paste the **Internet of Things Foundation**  **apiKey** and **apiToken** into those fields, click **Add**
-13. In the **Device Id** text box type **insurance-01** and then click **Ok** at the bottom
-13. Connect the **IBM IoT** node to the **convertPayload** and **extract location** nodes
-13. Click **Deploy** in the top right of the page to save your changes.
+7. Double-click the **DashDBQuery** node and in the **Service** drop down select the **dashDB** service attached to the back-end and click **OK**
+8. Double-click on the **DashDBRestCallToExecuteStoring** node.
+9. Check the **Use basic authentication?** box and paste the dashDB username and password
+10. Paste the **https_url**/dashdb-api/rscript into the **url** field and click **Ok**.
+11. Repeat steps 5 and 6 for the **DashDBRestCallToExecuteRScript** node and click **Deploy** at the top right
+12. Click the inject button next to the **Create dashDB tree** node to send the request to have the decision tree created
+13. To connect live data drag an  **IBM IoT** node from the left side bar menu to **Flow 1** and then double click on it to bring up the configuration menu.
+14. In the **Authentication** drop down select **API** Key
+15. Click the **edit** button next to the **API Key** field to add a new instance.
+16. Name it, Paste the **Internet of Things Foundation**  **apiKey** and **apiToken** into those fields, click **Add**
+17. In the **Device Id** text box type **insurance-01** and then click **Ok** at the bottom
+18. Connect the **IBM IoT** node to the **convertPayload** and **extract location** nodes
+19. Click **Deploy** in the top right of the page to save your changes.
 
 
 ## How the app works
