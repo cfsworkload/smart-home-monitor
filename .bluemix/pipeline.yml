@@ -25,7 +25,7 @@ stages:
       organization: ${CF_ORGANIZATION}
       space: ${CF_SPACE}
       application: ${CF_APP} 
-    script: "#!/bin/bash\n\ncd front-end\nsed -i 's/insuranceiot-build-22-back-end.mybluemix.net/'${CF_APP}'-back-end.mybluemix.net/g'\
+    script: "#!/bin/bash\n\ncd front-end\nsed -i 's/insuranceiot-build-wprichar-1139-back-end.mybluemix.net/'${CF_APP}'-back-end.mybluemix.net/g'\
       \ public/javascript/scripts.js\nhostname=\"${CF_APP}.mybluemix.net\"\ncf create-service\
       \ cloudantNoSQLDB Shared \"${CF_APP}-cloudant\"\ncf create-service iotf-service\
       \ iotf-service-free \"${CF_APP}-iotf-service\"\ncf push \"${CF_APP}-front-end\"\
