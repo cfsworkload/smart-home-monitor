@@ -1,11 +1,13 @@
-# Workload - Insurance IOT
+# Workload - Smart Home Monitor
 
-## Learn how to use IOT data to simulate insurance use cases
-The Insurance IOT app shows how you can use the **IoT Foundation**, **IoT Real-Time Insights**, and **dashDB** services to simulate grabbing IOT data from a broker and using it to provide meaniful real time data simulating Insurance company use.
+## Learn how to use IOT data to provide useful use cases and predictive analytics
+The Smart Home Monitor app shows how you can use the **IoT Foundation**, **IoT Real-Time Insights**, and **dashDB** services to simulate grabbing energy usage IOT data from an in-home appliance and use it to provide meaniful real time data.
 
 ## Introduction
-This Insurance IOT app has been created so you can deploy it into your personal DevOps space after signing up for Bluemix and DevOps Services. When you deploy the pipeline to Bluemix, the **Internet of Things Foundation**, **IoT Real-Time Insights**, and **dashDB** services will be created, 
-a front end web application, a back end **Node-red** application, and trains the services.
+This Smart Home app has been created so that you can deploy it into your personal DevOps space after signing up for Bluemix and DevOps Services. When you deploy to Bluemix, the **Internet of Things Foundation** service, **IoT Real-Time Insights** service , the **dashDB** service, 
+a front end web application, a back end **Node-red** application are all created. The deployment pipeline also trains the services. Once deployed, you can view the real time IOT data from the appliance hosted in the **Internet of Things Foundation** service, see the results of taking that data and querying **dashDB** for list of insurance approved electricians in the device's area,
+and get the likelihood of the appliance owner churning from the home insurance provider based on enegy use. This likelihood is decided by training **dashDB** with historical data to produce a decision tree that you than pass the appliance's current power us to return likely or not likely. Also when high power usage is detected
+on the appliance, an alert is triggered in the **IoT Real-Time Insights** service, which triggers an email being sent to a specified email.
 
 ## Create accounts and log in
 
@@ -32,8 +34,8 @@ Once the deployment finishes, you will have an instance of the Watson Conversati
 
 ## Add email to IoT Real-Time Insights service notifications
 
-The **IoT Real-Time Insights** service has been created and connected to the data from the simulated IOT device hosted in the **IoT Foundation** service. The create of a message source, message schema, message route, action, and  rule is done in the **deploy back-end** tile of the devOps pipeline using the service's REST API.
- We need to add an email address to recieve the alert messages when the high energy threshold is reached.
+The **IoT Real-Time Insights** service has been created and connected to the data of the simulated IOT device, hosted in the **IoT Foundation** service. The creation of a message source, message schema, message route, action, and  rule is done in the **deploy back-end** tile of the devOps pipeline using the service's REST API.
+We need to add an email address to recieve the alert messages when the high energy threshold is reached.
  
 
 1. Naviate to {App-name}-back-end's dashboard.
@@ -51,7 +53,7 @@ To stop email notifications to the specified email delete this email rule in ser
 
 ## Import tables into dashDB
 
-We now need to import all of our sample data into dashDB.
+We now need to create and fill our tables in **dashDB**. One table with the data on insurance approved electricians and the other with historical data on customers churning from the insruance company based on energy use. 
 
 1. Navigate to your Jazz Hub project and download the two .csv files in the root directory.
 2. Navigate to your **dashDB** instance in the {App-name}-back-end's dashboard and launch dashboard
@@ -68,12 +70,13 @@ We now need to import all of our sample data into dashDB.
 12. Select the **MINING_IN** table and then click **Finish**.
 
 
-The the MINING_IN and SERVICE_PROVIDER tables have been created and populated. Now the node-red needs to be set up.
+The MINING_IN table is now ready to be called by Node-red to create a churn decision tree and the SERVICE_PROVIDERS table is ready to be queried by Node-red to return a list of providers based on longitude and latitude input. 
 
 ## Create dashDB decision tree and add Bluemix credentials to Node-RED 
 
-The back end Node-RED applicaton has been provisoned with the need flows. The only thing missing is the credentials to **dashDB** and **IoT Real-Time Insights** and creating the decision 
-tree in dashDB for our predictive analytics.
+The back end Node-RED applicaton has been provisoned with the needed flows. It has three independent lanes. One that starts the **converyPayload** node that after connected to the real time data in the **IoT Foundation** service, sends the data to dashDB for scoring against the decision tree and 
+sends it to a websocket that is connected to the front end. The next lane that starts with the **extract location** node, after connected to IOT data, queries **dashDB** for providers in the area based on the IOT devices longitude and latitude and forwards to another websocket connected to 
+the front end. The last lane that starts with the **Create dashDB tree** node is run once at the beginning of this process to create the decision tree by sending an R script through REST API to run against the historical data in the MINING_INPUT table to be used later in the top Node-red lane. 
 
 1. Naviate to {App-name}-back-end's dashboard.
 2. Click **Show Credentials** for the **dashDB** service.
@@ -96,9 +99,14 @@ tree in dashDB for our predictive analytics.
 19. Grab a output **websocket** from the left side bar node menu and drag it onto **Flow 1**
 20. Double-click on it and click edit on the **Path** drop-down 
 21. For the **Path** put **/ServiceProviders** and leave other field default. Press **Update** and **Ok**
-22. Connect this node to the output of the **ExtractScoringResults** node
-23. Repeat steps 19 through 22 only for path put **/ws/scoring** and connect the node to the output of **DashDBRestCallToExecuteRScript**
-19. Click **Deploy** in the top right of the page to save your changes.
+22. Connect this node to the output of the **DashDBQuery** node
+23. Grab another output **websocket** from the left side bar node menu
+23. This time in the **Path** dropdown select **Add new websocket-listener** 
+24. Select edit and in the path put **/ws/scoring** and connect the node to the output of **ExtractScoringResults**
+25. Click **Deploy** in the top right of the page to save your changes.
+
+
+The **dashDB** decision tree has been created and the top two lanes have now connected to the **IoT Foundation** service live data and results forwarded to websockets connected to the front end. 
 
 
 ## How the app works
@@ -106,8 +114,26 @@ tree in dashDB for our predictive analytics.
 1. Go to your Bluemix dashboard and select the {App-name}-front-end newly created CF application
 2. Click the route at the top of the screen see the real time data being passed through
 
-In the front end web application you will see simulated IOT data being pass through. This is done by the front end server subscribing to a public broker and fowarding to data to the browser via websocket in the node.js source code found in /front-end/app.js. The data is also foward to the **IoT Real-Time Insights** at the same time.
-Also there is a google map that shows local providers approved by the Inusrance company in the area of the IOT
-device in case of needed electric maitenance. This map is simulated by recieving the Longitude and Latitude of the device from **IoT Real-Time Insights** via **Node-red**. It is then used to query pre-defined provider information hosted in **dashDB**. **Node-red** also uses the data it recieves
-from **IoT Real-Time Insights** to create a decision tree in **dashDB** for our preditive analytics. The IOT data is fed into this decision tree to determine if the current electric use levels show a probability that the device owner with churn from the company, shown in the 
-**Current probability that client will churn** section of the front end. 
+In the front end web application you will see simulated IOT data being pass through. This is done by the front end server subscribing to a public broker and fowarding to data to the browser via websocket. This is implemented in the node.js source code found in /front-end/app.js. The data is also foward to the **IoT Real-Time Insights** at the same time.
+The google map shows local providers approved by the Inusrance company in the area of the IOT device in case of needed electric maitenance. The likelihood of customer churning is also displayed that is returned from the **dashDB** decision tree query. 
+
+### IoT Foundations
+
+The **IOT Foundations** service acts as the broker for the node-red and **IoT Real-Time Insights** service. It recieves data from the web application front end via it's api. The front-end recieves MQTT messages from the public broker that it is subscribed to on a unique topic. 
+This simulates connecting to a public third IOT broker and integrating it into your own flow. **IOT Foundations** gets connected to the **IoT Real-Time Insights** in the deployment pipeline using the service's REST API. Node-red uses the service's **api key** and **api token** in the **ibmiot**
+node-red node to listen for the IOT data. 
+
+For more information on the IoT Foundations see https://www.ng.bluemix.net/docs/#services/IoT/index.html
+
+### IoT Real-Time Insights
+
+The **IoT Real-Time Insights** insights service is trained in the deployment pipeline and when it recieves energy user power rating more than 5000 it triggers an alert that triggers and email to the specified email. Click the service in the  {App-name}-back-end's dashboard to see alerts and information
+about the device in this service. 
+
+For more information on **IoT Real-Time Insights** see https://www.ng.bluemix.net/docs/services/iotrtinsights/index.html
+
+### dashDB
+
+**dashDB** is used as our warehouse for the electrician information and our data used to create our decision tree. It also provides the functionality to take our R script and create and host the tree. 
+
+For more information on **dashDB** see https://www.ng.bluemix.net/docs/#services/dashDB/index.html#dashDB
