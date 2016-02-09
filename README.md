@@ -6,7 +6,7 @@ The Smart Home Monitor app shows how you can use the **IoT Foundation**, **IoT R
 ## Introduction
 This Smart Home app has been created so that you can deploy it into your personal DevOps space after signing up for Bluemix and DevOps Services. When you deploy to Bluemix, the **Internet of Things Foundation** service, **IoT Real-Time Insights** service , the **dashDB** service, 
 a front end web application, a back end **Node-red** application are all created. The deployment pipeline also trains the services. Once deployed, you can view the real time IOT data from the appliance hosted in the **Internet of Things Foundation** service, see the results of taking that data and querying **dashDB** for list of insurance approved electricians in the device's area,
-and get the likelihood of the appliance owner churning from the home insurance provider based on enegy use. This likelihood is decided by training **dashDB** with historical data to produce a decision tree that you than pass the appliance's current power us to return likely or not likely. Also when high power usage is detected
+and get the likelihood of the appliance owner churning from the home insurance provider based on energy usage costs. This likelihood to churn is decided by scoring IOT data against the Decision Tree model built in dashDB with historical data and will return how likely or not likely the customer is to churn. Also when high power usage is detected
 on the appliance, an alert is triggered in the **IoT Real-Time Insights** service, which triggers an email being sent to a specified email.
 
 ## Create accounts and log in
@@ -20,7 +20,7 @@ When you sign up, you'll create an IBM ID, create an alias, and register with Bl
 
   [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://hub.jazz.net/git/cfsworkload/insuranceIOT-build)
 
-2.  Once you fill in the necessary fields, click **DEPLOY** to start the deployment of the Watson Conversation app and static services used.
+2.  Once you fill in the necessary fields, click **DEPLOY** to start the deployment of the Smart Home Monitor app and static services used.
 
 ## Monitor deployment
 
@@ -30,7 +30,7 @@ After the pipeline has been configured, you can monitor the deployment in DevOps
 2. Click **BUILD & DEPLOY**.
 3. Select **View logs and history** to monitor the deployment stages.
 
-Once the deployment finishes, you will have an instance of the Watson Conversation app in your Bluemix Dashboard.
+Once the deployment finishes, you will have an instance of theSmart Home Monitor app in your Bluemix Dashboard.
 
 ## Add email to IoT Real-Time Insights service notifications
 
@@ -74,13 +74,12 @@ The MINING_IN table is now ready to be called by Node-red to create a churn deci
 
 ## Create dashDB decision tree and add Bluemix credentials to Node-RED 
 
-The back end Node-RED applicaton has been provisoned with the needed flows. It has three independent lanes. One that starts the **converyPayload** node that after connected to the real time data in the **IoT Foundation** service, sends the data to dashDB for scoring against the decision tree and 
-sends it to a websocket that is connected to the front end. The next lane that starts with the **extract location** node, after connected to IOT data, queries **dashDB** for providers in the area based on the IOT devices longitude and latitude and forwards to another websocket connected to 
+The back end Node-RED applicaton has been provisoned with the needed flows. It has three independent lanes. One that starts the **converyPayload** node that after connected to the real time data in the **IoT Foundation** service, sends the data to dashDB for scoring against the decision tree model and sends the results to a websocket that is connected to the front end. The next lane that starts with the **extract location** node, after connected to IOT data, queries **dashDB** for providers in the area based on the IOT devices longitude and latitude and forwards to another websocket connected to 
 the front end. The last lane that starts with the **Create dashDB tree** node is run once at the beginning of this process to create the decision tree by sending an R script through REST API to run against the historical data in the MINING_INPUT table to be used later in the top Node-red lane. 
 
 1. Naviate to {App-name}-back-end's dashboard.
 2. Click **Show Credentials** for the **dashDB** service.
-3. Copy the **username**, **https_url**, and the **password**.
+3. Copy the **username**, **https_url**, and the **password** for DashDB.
 4. Click **Show Credentials** for the **Internet of Things Foundation** service.
 5. Copy the **apiKey** and **apiToken**.
 6. Navigate to the Node-RED flow by clicking on the URL at the top of the page and clicking on the **Go to your Node-RED flow editor** button.
