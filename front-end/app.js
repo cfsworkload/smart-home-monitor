@@ -91,6 +91,17 @@ var desc = "house humidty sensor"
 var metadata = {"customField1": "customValue3", "customField2": "customValue4"}
 var deviceInfo = {"serialNumber": "001", "manufacturer": "Blueberry", "model": "e2", "deviceClass": "A", "descriptiveLocation" : "Bangalore", "fwVersion" : "1.0.1", "hwVersion" : "12.01"}
 
+var config = {
+			"org" : services['iotf-service'][0]['credentials'].org.toString(),
+			"id" : "insurance-01",
+			"type" : "sensor",
+			"auth-method" : "token",
+			"auth-token" : "password"
+};
+var Client = require("ibmiotf");
+var deviceClient = new Client.IotfDevice(config);
+deviceClient.connect();
+deviceClient.on("connect", function () {
 // register IOT device type
 appClient.
 registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argument) {
@@ -107,15 +118,6 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 	appClient.registerDevice(type, deviceId, authToken, deviceInfo, location, metadata).then (function onSuccess (response) {
 		console.log("Success");
 		console.log(response);
-		var config = {
-			"org" : services['iotf-service'][0]['credentials'].org.toString(),
-			"id" : "insurance-01",
-			"type" : "sensor",
-			"auth-method" : "token",
-			"auth-token" : "password"
-		};
-
-		var Client = require("ibmiotf");
 		var io = require('socket.io')
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
@@ -124,35 +126,14 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 		});
         // on MQTT message
 		mqttClient.on('message', function (topic, message) {
-			var deviceClient = new Client.IotfDevice(config);
-			deviceClient.connect();
-			deviceClient.on("connect", function () {
 				console.log('publishing...');
 				// write MQTT message to IOT foundation services
 				deviceClient.publish("status","json", '{ "d" : ' + message + '}');
 				www.io.sockets.emit('update-msg', { data: message.toString() });
-				deviceClient.disconnect();
-			});
-
-			deviceClient.on('disconnect', function(){
-				console.log('Disconnected from IoTF');
-			});
 		});
-
-
 		}, function onError (error) {
-
 		console.log("Fail");
 		console.log(error);
-		var config = {
-			"org" : services['iotf-service'][0]['credentials'].org.toString(),
-			"id" : "insurance-01",
-			"type" : "sensor",
-			"auth-method" : "token",
-			"auth-token" : "password"
-		};
-
-		var Client = require("ibmiotf");
 		var io = require('socket.io');
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
@@ -160,17 +141,9 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 			mqttClient.subscribe(process.env.HOSTNAME);
 		});
 		mqttClient.on('message', function (topic, message) {
-			var deviceClient = new Client.IotfDevice(config);
-			deviceClient.connect();
-			deviceClient.on("connect", function () {
 				console.log('publishing...');
       			deviceClient.publish("status","json", '{ "d" : ' + message + '}');
 				www.io.sockets.emit('update-msg', { data: message.toString() });
-				deviceClient.disconnect();
-			});
-			deviceClient.on('disconnect', function(){
-				console.log('Disconnected from IoTF');
-			});
 		});
 	});
 	}, function onError (argument) {
@@ -187,14 +160,6 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 	appClient.registerDevice(type, deviceId, authToken, deviceInfo, location, metadata).then (function onSuccess (response) {
 		console.log("Success");
 		console.log(response);
-		var config = {
-			"org" : services['iotf-service'][0]['credentials'].org.toString(),
-			"id" : "insurance-01",
-			"type" : "sensor",
-			"auth-method" : "token",
-			"auth-token" : "password"
-		};
-		var Client = require("ibmiotf");
 		var io = require('socket.io')
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
@@ -202,31 +167,14 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 			mqttClient.subscribe(process.env.HOSTNAME);
 		});
 		mqttClient.on('message', function (topic, message) {
-			var deviceClient = new Client.IotfDevice(config);
-			deviceClient.connect();
-			deviceClient.on("connect", function () {
 				console.log('publishing...');
 				deviceClient.publish("status","json", '{ "d" : ' + message + '}');
 				www.io.sockets.emit('update-msg', { data: message.toString() });
-				deviceClient.disconnect();
-			});
-			deviceClient.on('disconnect', function(){
-				console.log('Disconnected from IoTF');
-			});
 		});
 
 		}, function onError (error) {
 		console.log("Fail");
 		console.log(error);
-		var config = {
-			"org" : services['iotf-service'][0]['credentials'].org.toString(),
-			"id" : "insurance-01",
-			"type" : "sensor",
-			"auth-method" : "token",
-			"auth-token" : "password"
-		};
-
-		var Client = require("ibmiotf");
 		var io = require('socket.io')
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
@@ -234,28 +182,19 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 			mqttClient.subscribe(process.env.HOSTNAME);
 		});
 		mqttClient.on('message', function (topic, message) {
-			var deviceClient = new Client.IotfDevice(config);
-			deviceClient.connect();
-			deviceClient.on("connect", function () {
 				console.log('publishing...');
 				deviceClient.publish("status","json", '{ "d" : ' + message + '}');
 				www.io.sockets.emit('update-msg', { data: message.toString() });
-				deviceClient.disconnect();
-			});
 
-			deviceClient.on('disconnect', function(){
-				console.log('Disconnected from IoTF');
-			});
 		});
 	});
+  });
 });
-
 var intervalCounter = 0;
 setInterval(function() {
 	var randomNumber = Math.floor(Math.random() * 1000) + (1000 * intervalCounter);
 
 	intervalCounter = (intervalCounter + 1) % 6;
-
 	var mqtt = require('mqtt');
 	var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 	mqttClient.on('connect', function () {
