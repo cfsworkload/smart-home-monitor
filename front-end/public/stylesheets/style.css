@@ -287,22 +287,18 @@ img {
   color: #FFFFFF;
 }
 
-#map-canvas {
-  height: 80%;
-  width: 80%;
-  margin: 0;
-  padding: 0;
+p {
+	font-size: 16pt;
+	color: white;
 }
 
-#analytics {
-  font-size: 12px;
-  /*font-family: helvetica;
-  text-align: center;*/
+#map-canvas {
+  height: 500px;
+  width: 100%;
+  max-height: 95%;
+  min-height: 75%;
   margin: 0;
   padding: 0;
-  height: 100%;
-  width: 100%;
-  
 }
 
 html, body {
@@ -315,6 +311,42 @@ html, body {
 	width: 80%;
 }
 
+.app-title, .subtitle, .output > p {
+	color: #00b39f;
+}
+
+.app-title {
+	font-size: 40px;
+}
+
+.subtitle, .output > h2 {
+	font-weight: bold;
+}
+
+.subtitle {
+	font-size: 28px;
+	
+}
+
+.output > h2 {
+	color: white;
+	font-size: 24px;
+}
+
+.output > p {
+	font-size: 36px;
+}
+
+.output {
+	margin: 25px 0;
+}
+
 .boolean {
-	font-size: 14px;
+	font-weight: bold;
+	font-size: 28px;
+	color: white;
+}
+
+.col-md-6, .col-md-12 {
+	height: 100%;
 }
