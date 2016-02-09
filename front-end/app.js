@@ -100,8 +100,7 @@ var config = {
 };
 var Client = require("ibmiotf");
 var deviceClient = new Client.IotfDevice(config);
-deviceClient.connect();
-deviceClient.on("connect", function () {
+
 // register IOT device type
 appClient.
 registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argument) {
@@ -118,7 +117,12 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 	appClient.registerDevice(type, deviceId, authToken, deviceInfo, location, metadata).then (function onSuccess (response) {
 		console.log("Success");
 		console.log(response);
-		var io = require('socket.io')
+		var Client = require("ibmiotf");
+        var deviceClient = new Client.IotfDevice(config);
+        deviceClient.connect();
+        deviceClient.on("connect", function () {
+
+		var io = require('socket.io');
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 		mqttClient.on('connect', function () {
@@ -131,9 +135,15 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 				deviceClient.publish("status","json", '{ "d" : ' + message + '}');
 				www.io.sockets.emit('update-msg', { data: message.toString() });
 		});
+	    });
+
 		}, function onError (error) {
 		console.log("Fail");
 		console.log(error);
+		var Client = require("ibmiotf");
+        var deviceClient = new Client.IotfDevice(config);
+        deviceClient.connect();
+        deviceClient.on("connect", function () {
 		var io = require('socket.io');
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
@@ -145,6 +155,8 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
       			deviceClient.publish("status","json", '{ "d" : ' + message + '}');
 				www.io.sockets.emit('update-msg', { data: message.toString() });
 		});
+	});
+
 	});
 	}, function onError (argument) {
 
@@ -160,7 +172,11 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 	appClient.registerDevice(type, deviceId, authToken, deviceInfo, location, metadata).then (function onSuccess (response) {
 		console.log("Success");
 		console.log(response);
-		var io = require('socket.io')
+		var Client = require("ibmiotf");
+        var deviceClient = new Client.IotfDevice(config);
+        deviceClient.connect();
+        deviceClient.on("connect", function () {
+		var io = require('socket.io');
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
 		mqttClient.on('connect', function () {
@@ -171,10 +187,14 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 				deviceClient.publish("status","json", '{ "d" : ' + message + '}');
 				www.io.sockets.emit('update-msg', { data: message.toString() });
 		});
-
+});
 		}, function onError (error) {
 		console.log("Fail");
 		console.log(error);
+		var Client = require("ibmiotf");
+        var deviceClient = new Client.IotfDevice(config);
+        deviceClient.connect();
+        deviceClient.on("connect", function () {
 		var io = require('socket.io')
 		var mqtt = require('mqtt');
 		var mqttClient = mqtt.connect('mqtt://test.mosquitto.org');
@@ -188,8 +208,10 @@ registerDeviceType(type,desc,deviceInfo,metadata).then (function onSuccess (argu
 
 		});
 	});
-  });
-});
+
+	});
+ });
+
 var intervalCounter = 0;
 setInterval(function() {
 	var randomNumber = Math.floor(Math.random() * 1000) + (1000 * intervalCounter);
