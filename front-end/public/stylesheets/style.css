@@ -293,8 +293,10 @@ p {
 }
 
 #map-canvas {
-  height: 80%;
-  width: 80%;
+  height: 500px;
+  width: 100%;
+  max-height: 95%;
+  min-height: 75%;
   margin: 0;
   padding: 0;
 }
@@ -309,12 +311,12 @@ html, body {
 	width: 80%;
 }
 
-h1.title, .subtitle, .output > p {
+.app-title, .subtitle, .output > p {
 	color: #00b39f;
 }
 
-.title {
-	font-size: 27pt;
+.app-title {
+	font-size: 40px;
 }
 
 .subtitle, .output > h2 {
@@ -322,22 +324,26 @@ h1.title, .subtitle, .output > p {
 }
 
 .subtitle {
-	font-size: 24pt;
+	font-size: 28px;
 	
 }
 
 .output > h2 {
 	color: white;
-	font-size: 18pt;
+	font-size: 24px;
 }
 
 .output > p {
-	font-size: 41pt;
+	font-size: 36px;
+}
+
+.output {
+	margin: 25px 0;
 }
 
 .boolean {
 	font-weight: bold;
-	font-size: 24pt;
+	font-size: 28px;
 	color: white;
 }
 
