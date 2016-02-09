@@ -340,3 +340,8 @@ html, body {
 	font-size: 24pt;
 	color: white;
 }
+
+.col-md-6, .col-md-12 {
+	height: 100%;
+	width: 100%;
+}
