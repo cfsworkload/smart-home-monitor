@@ -350,3 +350,7 @@ html, body {
 .col-md-6, .col-md-12 {
 	height: 100%;
 }
+
+.map {
+	text-align: center;
+}

@@ -80,8 +80,8 @@ $(document).ready(function(){
       var longitude = provider.insertCell(3);
       longitude.innerHTML = counter.LONGITUDE;
 
-      var div = document.getElementById('text');
-      div.innerHTML=table.innerHTML.replace('tbody','table').replace('tbody','table');
+      /*var div = document.getElementById('text');
+      div.innerHTML=table.innerHTML.replace('tbody','table').replace('tbody','table');*/
 
       addMarker(counter.LATITUDE,counter.LONGITUDE);
       document.getElementById('map-canvas').style.visibility='visible';
