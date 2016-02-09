@@ -309,7 +309,7 @@ html, body {
 	width: 80%;
 }
 
-.title, .subtitle, .output > p {
+h1.title, .subtitle, .output > p {
 	color: #00b39f;
 }
 
@@ -339,4 +339,8 @@ html, body {
 	font-weight: bold;
 	font-size: 24pt;
 	color: white;
+}
+
+.col-md-6, .col-md-12 {
+	height: 100%;
 }
