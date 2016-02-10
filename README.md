@@ -50,6 +50,9 @@ You can add an email address to receive alert messages when the high energy thre
 6. Add an email address in the **To** field and enter a **Subject**.
 7. Check the **Prepend with "IoT Real-Time Insights alert"** box.
 8. Click the **OK** boxes.
+9. Click **power > 5000** rule
+10. In the **Set the condition** box click **x** on the power **Data point** to clear it
+11. In the **Data point** drop down select **d.power** and click **OK**
 9. Click **SAVE** at top right, then **OK**.
 
 The email alerts are now set. You can also see the alerts on the Insights Dashboard for the insurance-01 device.
