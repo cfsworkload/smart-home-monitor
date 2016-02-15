@@ -1,3 +1,7 @@
+// Copyright (c) 2016 IBM Corp. All rights reserved.
+// Use of this source code is governed by the Apache License,
+// Version 2.0, a copy of which can be found in the LICENSE file.
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');

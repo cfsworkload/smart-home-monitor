@@ -1,3 +1,7 @@
+// Copyright (c) 2016 IBM Corp. All rights reserved.
+// Use of this source code is governed by the Apache License,
+// Version 2.0, a copy of which can be found in the LICENSE file.
+
 $(document).ready(function() {
   window.location.origin = window.location.origin || (window.location.protocol + '//' + window.location.hostname + ':' + window.location.port);
   var socket = io.connect(window.location.origin);
